@@ -26,10 +26,14 @@ section {
   /* align-self: center; */
 }
 aside {
-  width: 250px;
-  height: 700px;
+  width: 175px;
+  /* height: min-content; */
   overflow: scroll;
-  float: right;
+  /* float: right; */
+  position: absolute;
+  top: 80px;
+  bottom: 40px;
+  right: 0px;
 }
 footer {
   flex-shrink: 0;
@@ -37,6 +41,7 @@ footer {
   flex-direction: column;
   justify-content: center;
   border-top: 1px solid black;
+  height: 30px;
 }
 
 h1 {
