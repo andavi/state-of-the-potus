@@ -1,0 +1,32 @@
+{
+  "name": "state-of-the-potus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andavi/state-of-the-potus.git"
+  },
+  "author": "Andrew Davis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andavi/state-of-the-potus/issues"
+  },
+  "homepage": "https://github.com/andavi/state-of-the-potus#readme",
+  "dependencies": {
+    "chart": "^0.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "eslint": "^5.12.1",
+    "express": "^4.16.4",
+    "indico.io": "^0.10.5",
+    "method-override": "^3.0.0",
+    "pg": "^7.8.0",
+    "superagent": "^4.1.0"
+  }
+}
