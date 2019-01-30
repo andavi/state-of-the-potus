@@ -8,11 +8,20 @@ const pg = require('pg');
 const methodOverride = require('method-override');
 const indico = require('indico.io');
 indico.apiKey = process.env.INDICO_API_KEY;
+var Twitter = require('twitter');
 
 
 // Load env vars;
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
+
+// Twitter Client set up
+var twitterClient = new Twitter({
+  consumer_key: process.env.TWITTER_API_KEY,
+  consumer_secret: process.env.TWITTER_API_SECRET_KEY,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+});
 
 // PostgresQL setup
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -48,6 +57,20 @@ app.get('/', home);
 
 function home(req, res) {
   res.render('pages/index');
+  // var params = {
+  //   screen_name: 'realDonaldTrump',
+  //   trim_user: true,
+  //   exclude_replies: true,
+  //   include_rts: false,
+  //   count: 20,
+  //   tweet_mode: 'extended'
+  // };
+  // twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
+  //   if (!error) {
+  //     console.log(tweets);
+  //     res.send(tweets);
+  //   }
+  // });
 }
 
 // ============================

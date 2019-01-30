@@ -4,10 +4,53 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 .content {
   flex: 1 0 auto;
 }
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px black solid;
+  height: 80px;
+}
+main {
+  /* display: flex;
+  flex-direction: row;
+  justify-content: flex-end; */
+}
+section {
+  /* justify-self: flex-start; */
+  /* align-self: center; */
+}
+aside {
+  width: 250px;
+  height: 700px;
+  overflow: scroll;
+  float: right;
+}
 footer {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 1px solid black;
+}
+
+h1 {
+  font-size: 200%;
+}
+h2 {
+  font-size: 150%;
+}
+h3 {
+  font-size: 125%;
+}
+p {
+  font-size: 100%;
+}
+small {
+  font-size: 80%;
 }
