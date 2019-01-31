@@ -3,8 +3,9 @@
 // Load Dependencies
 const express = require('express');
 const cors = require('cors');
-const superagent = require('superagent');
+// const superagent = require('superagent');
 const pg = require('pg');
+const format = require('pg-format');
 const methodOverride = require('method-override');
 const indico = require('indico.io');
 indico.apiKey = process.env.INDICO_API_KEY;
@@ -24,9 +25,9 @@ var twitterClient = new Twitter({
 });
 
 // PostgresQL setup
-const client = new pg.Client(process.env.DATABASE_URL);
-client.connect();
-client.on('error', err => console.error(err));
+const pgClient = new pg.Client(process.env.DATABASE_URL);
+pgClient.connect();
+pgClient.on('error', err => console.error(err));
 
 // App setup, configure, and middlewares
 const app = express();
@@ -56,27 +57,126 @@ app.get('/', home);
 // ============================
 
 function home(req, res) {
-  res.render('pages/index');
-  // var params = {
-  //   screen_name: 'realDonaldTrump',
-  //   trim_user: true,
-  //   exclude_replies: true,
-  //   include_rts: false,
-  //   count: 20,
-  //   tweet_mode: 'extended'
-  // };
-  // twitterClient.get('statuses/user_timeline', params, function(error, tweets, response) {
-  //   if (!error) {
-  //     console.log(tweets);
-  //     res.send(tweets);
-  //   }
-  // });
+  // check that we're  not adding repeats to the db
+  const SQL = 'SELECT id FROM tweets;';
+  pgClient.query(SQL)
+    .then(result => {
+      const repeatIds = result.rows.map(row => Number(row.id));
+
+      var params = {
+        screen_name: 'realDonaldTrump',
+        trim_user: true,
+        exclude_replies: true,
+        include_rts: false,
+        count: 200,
+        tweet_mode: 'extended',
+        since_id: 1.09073103629888e+18
+      };
+      twitterClient.get('statuses/user_timeline', params)
+        .then(tweets => {
+          // not keeping tweets that have links or are repeats
+          const filteredTweets = tweets.filter(t => t.entities.urls.length === 0 && !repeatIds.includes(t.id));
+
+          // if all tweets have been stored, retrieve them and render page
+          if (filteredTweets.length === 0) {
+            let SQL = 'SELECT * FROM tweets';
+            pgClient.query(SQL)
+              .then(result => {
+                return res.render('pages/index', {tweets: result.rows});
+              })
+              .catch(err => handleError(err));
+
+          // otherwise continue on to analyze and store the new ones
+          } else {
+            const fullTexts = filteredTweets.map(t => t.full_text.replace(/&amp;/g, '&'));
+
+            // get sentiment_hq
+            indico.sentimentHQ(fullTexts)
+              .then(sentimentArr => {
+
+                // get emotions in second batch request
+                indico.emotion(fullTexts)
+                  .then(emotionsArr => {
+
+                    // get political analysis next
+                    indico.political(fullTexts)
+                      .then(politicalArr => {
+
+                        // then personality
+                        indico.personality(fullTexts)
+                          .then(personalityArr => {
+
+                            // normalize the tweets to the information we want
+                            const normalizedTweets = [];
+                            for (let i in filteredTweets) {
+                              const normTweet = new Tweet(
+                                filteredTweets[i],
+                                fullTexts[i],
+                                sentimentArr[i],
+                                emotionsArr[i],
+                                politicalArr[i],
+                                personalityArr[i]
+                              )
+                              normalizedTweets.push(normTweet);
+                            }
+
+                            // store in db
+                            const valuesArr = normalizedTweets.map(t => {
+                              return [t.id, t.created_at, t.full_text, t.sentiment, t.anger, t.fear, t.joy, t.sadness, t.surprise, t.libertarian, t.green, t.liberal, t.conservative, t.extraversion, t.openness, t.agreeableness, t.conscientiousness]
+                            })
+                            let SQL = format('INSERT INTO tweets (id, created_at, full_text, sentiment, anger, fear, joy, sadness, surprise, libertarian, green, liberal, conservative, extraversion, openness, agreeableness, conscientiousness) VALUES %L', valuesArr);
+
+                            pgClient.query(SQL)
+                              .then(result => {
+                                console.log(result);
+
+                                let SQL = 'SELECT * FROM tweets';
+                                pgClient.query(SQL)
+                                  .then(result => {
+                                    res.render('pages/index', {tweets: result.rows});
+                                  })
+                                  .catch(err => handleError(err));
+                              })
+                              .catch(err => handleError(err));
+                          })
+                          .catch(err => handleError(err));
+                      })
+                      .catch(err => handleError(err));
+                  })
+                  .catch(err => handleError(err));
+              })
+              .catch(err => handleError(err));
+          }
+        })
+        .catch(err => handleError(err));
+    })
+    .catch(err => handleError(err));
+
 }
+
 
 // ============================
 // Helper functions
 // ============================
-
+function Tweet(tweet, full_text, sentiment, emotions, political, personality) {
+  this.created_at = new Date(tweet.created_at);
+  this.id = tweet.id;
+  this.full_text = full_text;
+  this.sentiment = sentiment;
+  this.anger = emotions.anger;
+  this.fear = emotions.fear;
+  this.joy = emotions.joy;
+  this.sadness = emotions.sadness;
+  this.surprise = emotions.surprise;
+  this.libertarian = political.Libertarian;
+  this.green = political.Green;
+  this.liberal = political.Liberal;
+  this.conservative = political.Conservative;
+  this.extraversion = personality.extraversion;
+  this.openness = personality.openness;
+  this.agreeableness = personality.agreeableness;
+  this.conscientiousness = personality.conscientiousness;
+}
 
 
 

@@ -27,6 +27,7 @@
     "indico.io": "^0.10.5",
     "method-override": "^3.0.0",
     "pg": "^7.8.0",
+    "pg-format": "^1.0.4",
     "superagent": "^4.1.0",
     "twitter": "^1.7.1"
   }

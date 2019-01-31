@@ -6,10 +6,20 @@
     <%- include('../layout/header') %>
 
     <main>
+
       <p id="hider"><</p>
       <%- include('../layout/aside') %>
+
+      <h3>Index - <%= tweets.length %> Tweets</h3>
       <section>
-        <h3>Index</h3>
+        <% tweets.forEach(tweet => { %>
+          <div class="tweet">
+            <h4><em><%= tweet.created_at.toDateString() %></em></h4>
+            <small><%= tweet.created_at.toTimeString().split('(')[0] %></small>
+            <hr>
+            <p><%= tweet.full_text.split(' ').slice(0, 10).join(' ') + '...' %></p>
+          </div>
+        <% }) %>
       </section>
 
     </main>
