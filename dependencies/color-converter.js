@@ -27,11 +27,11 @@ function rgbToRgba(rgb) {
 }
 
 function hexToRGBa (hexListStr, opacity) {
-  return hexListStr.split(', ').map(hexToRgb).map(rgbToRgba, {opacity});
+  return hexListStr.split(',').map(hexToRgb).map(rgbToRgba, {opacity});
 }
 
 
-function generateColorMap (hexListString, opacity) {
+function generateColorMap (hexListString, opacity, keys) {
   const pairs = hexListString.split(', ').map(hex => {
     return [
       rgbToRgba.apply({opacity: 1}, [hexToRgb(hex)]),
@@ -39,22 +39,21 @@ function generateColorMap (hexListString, opacity) {
     ];
   });
 
-  // table for orderomg emotion by color
-  const emotions = {
-    'sentiment': 1,
-    'anger': 3,
-    'fear': 4,
-    'joy': 5,
-    'sadness': 0,
-    'surprise': 2
-  };
-
-  const colormap = {};
-  for (let e of Object.keys(emotions)) {
-    colormap[e] = pairs[emotions[e]];
-  }
-  return colormap;
+  const newMap = {};
+  keys.forEach((k,i) => {
+    newMap[k] = pairs[i];
+  });
+  return newMap;
 }
+
+const emotions= [
+  'sadness',
+  'sentiment',
+  'surprise',
+  'anger',
+  'fear',
+  'joy'
+];
 
 const politicalParties = [
   'libertarian',
@@ -62,20 +61,6 @@ const politicalParties = [
   'liberal',
   'conservative'
 ];
-
-function generatePoliticalColorMap (hexListString, opacity) {
-  const pairs = hexListString.split(', ').map(hex => {
-    return [
-      rgbToRgba.apply({opacity: 1}, [hexToRgb(hex)]),
-      rgbToRgba.apply({opacity: opacity}, [hexToRgb(hex)])
-    ];
-  });
-  const poliColorMap = politicalParties.map((p,i) => ({p: pairs[i]}));
-  return poliColorMap;
-}
-
-
-
 
 // =======================================
 // keeping different color palettes here
@@ -88,17 +73,15 @@ const pinksToGreens = '#FE2A57, #FB788C, #F6BAA1, #AFB39D, #4B918D, #3D494A';
 const standard = '#3E455A, #A4CF4C, #A15697, #D83332, #FCDD5D, #5BBEDE';
 const standardHalfDark = '#2B303F, #94C635, #913C85, #D12423, #FCD741, #3FB3D8';
 const politicalHexes = '#E5E34B, #66CA89, #4DA0BD, #E96767';
-
 // =======================================
 
+const emotionsColorMap = generateColorMap(standard, .2, emotions);
+const politicalColorMap = generateColorMap(politicalHexes, .5, politicalParties);
 
-// const blueishCM = generateColorMap(blueishHL);
-
-// console.log(generateColorMap(standard, 0.3));
+console.log(emotionsColorMap);
+console.log(politicalColorMap);
 
 module.exports = {
-  hexToRgb,
-  hexToRGBa,
-  generateColormap: o => generateColorMap(standard, o),
-  generatePoliticalColorMap: o => generatePoliticalColorMap(politicalHexes, o)
+  emotionsColorMap,
+  politicalColorMap
 }

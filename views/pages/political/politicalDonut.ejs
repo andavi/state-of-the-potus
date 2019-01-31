@@ -1,48 +1,47 @@
 <div class="poliDonutContainer">
-    <canvas id="poliDonut"></canvas>
-  </div>
+  <canvas id="poliDonut"></canvas>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
-  <script>
-    window.onload = function () {
-      // This creates normal js object to work wth
-          const totals = <%- JSON.stringify(politicalTotals) %>;
-          const colormap = <%- JSON.stringify(colormap) %>;
-      console.log(colormap[2].p[0]);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+<script>
+  window.onload = function () {
+    // This creates normal js object to work wth
+    const totals = <% - JSON.stringify(politicalTotals) %>;
+    const poliColorMap = <% - JSON.stringify(poliColorMap) %>;
+    console.log(poliColorMap)
+    var ctx = document.getElementById("poliDonut");
+    var myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ["Libertarian", "Green", "Liberal", "Conservative"],
+        datasets: [{
+          label: 'Political Text Analysis',
+          data: [totals.libertarian, totals.green, totals.liberal, totals.conservative],
+          backgroundColor: [
+            poliColorMap.libertarian[1],
+            poliColorMap.green[1],
+            poliColorMap.liberal[1],
+            poliColorMap.conservative[1],
+          ],
+          borderColor: [
+            poliColorMap.libertarian[0],
+            poliColorMap.green[0],
+            poliColorMap.liberal[0],
+            poliColorMap.conservative[0],
 
-      var ctx = document.getElementById("poliDonut");
-      var myChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-              labels: ["Libertarian", "Green", "Liberal", "Conservative"],
-              datasets: [{
-                  label: 'Political Text Analysis',
-                  data: [totals.libertarian, totals.green, totals.liberal, totals.conservative],
-                  backgroundColor: [
-                      colormap[0].p[1],
-                      colormap[1].p[1],
-                      colormap[2].p[1],
-                      colormap[3].p[1],
-                  ],
-                  borderColor: [
-                      colormap[0].p[0],
-                      colormap[1].p[0],
-                      colormap[2].p[0],
-                      colormap[3].p[0]
-
-                  ],
-                  borderWidth: 2
-              }]
-          },
-          options: {
-              scales: {
-                  yAxes: [{
-                      ticks: {
-                          beginAtZero:true
-                      }
-                  }]
-              }
-          }
-      });
-    }
-  </script>
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+  }
+</script>

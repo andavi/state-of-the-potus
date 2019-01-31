@@ -13,8 +13,8 @@ var Twitter = require('twitter');
 // var Chart = require('chart.js');
 
 // const createGradient = require('./dependencies/gradient');
-const generateColorMap = require('./dependencies/color-converter').generateColorMap;
-const generatePoliticalColorMap = require('./dependencies/color-converter').generatePoliticalColorMap;
+const emotionsColorMap = require('./dependencies/color-converter').emotionsColorMap;
+const poliColorMap = require('./dependencies/color-converter').politicalColorMap;
 
 
 // Load env vars;
@@ -78,8 +78,7 @@ function home1(req, res) {
     .then(result => {
       return res.render('pages/home/index', {
         tweets: result.rows,
-        barColorMap: generateColorMap(0.2),
-        lineColorMap: generateColorMap(0.05),
+        barColorMap: emotionsColorMap,
         getStrongestEmotion
       });
     })
@@ -115,8 +114,7 @@ function home(req, res) {
                 // console.log('this ...homeArgs worked')
                 return res.render('pages/home/index', {
                   tweets: result.rows,
-                  barColorMap: generateColorMap(0.2),
-                  lineColorMap: generateColorMap(0.05),
+                  barColorMap: emotionsColorMap,
                   getStrongestEmotion
                 });
               })
@@ -172,8 +170,7 @@ function home(req, res) {
                                   .then(result => {
                                     return res.render('pages/home/index', {
                                       tweets: result.rows,
-                                      barColorMap: generateColorMap(0.2),
-                                      lineColorMap: generateColorMap(0.05),
+                                      barColorMap: emotionsColorMap,
                                       getStrongestEmotion
                                     });
                                   })
@@ -203,7 +200,7 @@ function details(req, res) {
       console.log(result.rows[0]);
       return res.render('pages/details/show', {
         tweet: result.rows[0],
-        barColorMap: generateColorMap(0.3),
+        barColorMap: emotionsColorMap,
         emotion: getStrongestEmotion(result.rows[0])[0]
       });
     })
@@ -215,6 +212,7 @@ function emotional(req, res) {
 }
 
 function political(req, res) {
+  // console.log(generatePoliticalColorMap(0.5))
   const SQL = 'SELECT libertarian, green, liberal, conservative FROM tweets;';
   console.log(SQL);
   pgClient.query(SQL)
@@ -230,7 +228,7 @@ function political(req, res) {
       console.log(politicalTotals);
       return res.render('pages/political/show', {
         politicalTotals,
-        colormap: generatePoliticalColorMap(0.5)
+        poliColorMap: poliColorMap
       });
     })
     .catch(err => handleError(err));
