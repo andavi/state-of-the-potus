@@ -12,7 +12,7 @@
 
       <section>
         <% tweets.forEach(tweet => { %>
-          <%- include('partials/preview', {tweet}) %>
+          <%- include('partials/preview', {tweet, emotion: getStrongestEmotion(tweet)[0]}) %>
         <% }) %>
       </section>
 

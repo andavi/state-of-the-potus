@@ -9,13 +9,13 @@
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Sadness", "Sentiment", "Surprise", "Anger", "Fear", "Joy"],
+            labels: ["Sadness", "Surprise", "Anger", "Fear", "Joy"],
             datasets: [{
-                label: 'Emotional Text Analysis',
-                data: [tweet.sadness, tweet.sentiment, tweet.surprise, tweet.anger, tweet.fear, tweet.joy],
+                label: 'Emotional Matrix Analysis',
+                data: [tweet.sadness, tweet.surprise, tweet.anger, tweet.fear, tweet.joy],
                 backgroundColor: [
                     colormap.sadness[1],
-                    colormap.sentiment[1],
+                    // colormap.sentiment[1],
                     colormap.surprise[1],
                     colormap.anger[1],
                     colormap.fear[1],
@@ -23,14 +23,20 @@
                 ],
                 borderColor: [
                     colormap.sadness[0],
-                    colormap.sentiment[0],
+                    // colormap.sentiment[0],
                     colormap.surprise[0],
                     colormap.anger[0],
                     colormap.fear[0],
                     colormap.joy[0]
                 ],
                 borderWidth: 2
-            }]
+            },{
+                label: 'Sentiment Measurement',
+                data: new Array(5).fill(tweet.sentiment),
+                backgroundColor: 'rgba(164, 207, 76, 0.05)',
+                borderColor: colormap.sentiment[0],
+                type: 'line'
+                }]
         },
         options: {
             scales: {

@@ -67,8 +67,9 @@ function home1(req, res) {
     .then(result => {
       return res.render('pages/index', {
         tweets: result.rows,
-        barColorMap: generateColorMap(0.3),
-        lineColorMap: generateColorMap(0.05)
+        barColorMap: generateColorMap(0.2),
+        lineColorMap: generateColorMap(0.05),
+        getStrongestEmotion
       });
     })
     .catch(err => handleError(err));
@@ -177,9 +178,11 @@ function details(req, res) {
   const SQL = `SELECT * FROM tweets WHERE id=${req.params.id};`;
   pgClient.query(SQL)
     .then(result => {
+      console.log(result.rows[0]);
       res.render('pages/details/show', {
         tweet: result.rows[0],
         barColorMap: generateColorMap(0.3),
+        emotion: getStrongestEmotion(result.rows[0])[0]
       });
     })
     .catch(err => handleError(err));
@@ -207,6 +210,11 @@ function Tweet(tweet, full_text, sentiment, emotions, political, personality) {
   this.openness = personality.openness;
   this.agreeableness = personality.agreeableness;
   this.conscientiousness = personality.conscientiousness;
+}
+
+function getStrongestEmotion(tweet) {
+  const emotions = ['anger', 'fear', 'joy', 'sadness', 'surprise'];
+  return Object.entries(tweet).filter(([k]) => emotions.includes(k)).sort((a, b) => b[1] - a[1])[0];
 }
 
 
