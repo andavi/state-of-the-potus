@@ -48,11 +48,11 @@ function generateColorMap (hexListString, opacity, keys) {
 
 const emotions= [
   'sadness',
-  'sentiment',
+  'joy',
   'surprise',
   'anger',
   'fear',
-  'joy'
+  'sentiment'
 ];
 
 const politicalParties = [
@@ -82,14 +82,16 @@ const standard = '#3E455A, #A4CF4C, #A15697, #D83332, #FCDD5D, #5BBEDE';
 const standardHalfDark = '#2B303F, #94C635, #913C85, #D12423, #FCD741, #3FB3D8';
 const politicalHexes = '#E5E34B, #66CA89, #4DA0BD, #E96767';
 const green2reds = '#6E4B4B, #687279, #55A8A3, #B4DEA8';
-const personality = '#399CB8, #9FF29C, #9CC4D6, #D67466';
+const personalityHexes = '#399CB8, #9FF29C, #9CC4D6, #D67466';
 // =======================================
 
-const emotionsColorMap = generateColorMap(standard, .2, emotions);
+const emotionColorMap = generateColorMap(standard, .5, emotions);
 const politicalColorMap = generateColorMap(politicalHexes, .5, politicalParties);
+const persoColorMap = generateColorMap(personalityHexes, .5, personalityTraits);
 
 
 module.exports = {
-  emotionsColorMap,
-  politicalColorMap
+  emotionColorMap,
+  politicalColorMap,
+  persoColorMap
 }

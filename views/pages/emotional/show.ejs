@@ -1,0 +1,17 @@
+<html lang="en">
+<%- include('../../layout/head') %>
+<body>
+  <div class="content">
+    <%- include('../../layout/header') %>
+    <main>
+      <p id="hider"><</p>
+      <%- include('../../layout/aside') %>
+      <%- include('../../layout/banner', {heading: 'Emotional Text Analysis'}) %>
+      <section>
+        <%- include('emotion-pie', {emotionTotals, emotionColorMap}) %>
+      </section>
+    </main>
+  </div>
+  <%- include('../../layout/footer') %>
+</body>
+</html>

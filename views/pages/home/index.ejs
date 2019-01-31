@@ -3,18 +3,20 @@
 <%- include('../../layout/head') %>
 <body>
   <div class="content">
-    <%- include('../../layout/header') %>
+    <%- include('../../layout/header', {tweets}) %>
     <main>
       <p id="hider"><</p>
       <%- include('../../layout/aside') %>
 
-      <%- include('../../layout/banner', {heading: `Home - ${tweets.length} tweets and counting`}) %>
+      <%- include('../../layout/banner', {heading: `The State of the POTUS is`}) %>
 
       <%
       const table = {anger: 'Angry', fear: 'Fearful', joy: 'Joyful', sadness: 'Sad', surprise: 'Surprised'};
       const recentEmotion = getStrongestEmotion(tweets[0])[0];
       %>
-      <h3><%- `Based on the best information available, the current State of the POTUS is: <div class="${recentEmotion}" id="status"><a href="/${tweets[0].id}">${table[recentEmotion]}</a></div>` %></h3>
+      <%- `<div class="${recentEmotion}" id="status"><h1><a href="/${tweets[0].id}">${table[recentEmotion]}</a></h1></div>` %>
+
+      <%- include('../../layout/status', {tweets}) %>
 
       <section>
         <% tweets.forEach(tweet => { %>
