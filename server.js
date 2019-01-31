@@ -10,9 +10,9 @@ const methodOverride = require('method-override');
 const indico = require('indico.io');
 indico.apiKey = process.env.INDICO_API_KEY;
 var Twitter = require('twitter');
-var Chart = require('chart.js');
+// var Chart = require('chart.js');
 
-const createGradient = require('./dependencies/gradient');
+// const createGradient = require('./dependencies/gradient');
 const generateColorMap = require('./dependencies/color-converter').generateColormap;
 
 
@@ -53,7 +53,10 @@ app.set('view engine', 'ejs');
 // Routes
 // ============================
 
-app.get('/', home1);
+app.get('/', home);
+app.get('/emotional', emotional);
+app.get('/political', political);
+app.get('/personality', personality);
 app.get('/:id', details);
 
 
@@ -61,11 +64,18 @@ app.get('/:id', details);
 // Route handlers
 // ============================
 
+// useful global object for passing into index render
+// const homeArgs = {
+//   barColorMap: generateColorMap(0.2),
+//   lineColorMap: generateColorMap(0.05),
+//   getStrongestEmotion
+// };
+
 function home1(req, res) {
   let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
   pgClient.query(SQL)
     .then(result => {
-      return res.render('pages/index', {
+      return res.render('pages/home/index', {
         tweets: result.rows,
         barColorMap: generateColorMap(0.2),
         lineColorMap: generateColorMap(0.05),
@@ -101,7 +111,13 @@ function home(req, res) {
             let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
             pgClient.query(SQL)
               .then(result => {
-                return res.render('pages/index', {tweets: result.rows});
+                // console.log('this ...homeArgs worked')
+                return res.render('pages/home/index', {
+                  tweets: result.rows,
+                  barColorMap: generateColorMap(0.2),
+                  lineColorMap: generateColorMap(0.05),
+                  getStrongestEmotion
+                });
               })
               .catch(err => handleError(err));
 
@@ -153,7 +169,12 @@ function home(req, res) {
                                 let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
                                 pgClient.query(SQL)
                                   .then(result => {
-                                    res.render('pages/index', {tweets: result.rows});
+                                    return res.render('pages/home/index', {
+                                      tweets: result.rows,
+                                      barColorMap: generateColorMap(0.2),
+                                      lineColorMap: generateColorMap(0.05),
+                                      getStrongestEmotion
+                                    });
                                   })
                                   .catch(err => handleError(err));
                               })
@@ -179,7 +200,7 @@ function details(req, res) {
   pgClient.query(SQL)
     .then(result => {
       console.log(result.rows[0]);
-      res.render('pages/details/show', {
+      return res.render('pages/details/show', {
         tweet: result.rows[0],
         barColorMap: generateColorMap(0.3),
         emotion: getStrongestEmotion(result.rows[0])[0]
@@ -188,8 +209,54 @@ function details(req, res) {
     .catch(err => handleError(err));
 }
 
+function emotional(req, res) {
+  return res.send('emotional');
+}
+
+function political(req, res) {
+  const SQL = 'SELECT libertarian, green, liberal, conservative FROM tweets;';
+  console.log(SQL);
+  pgClient.query(SQL)
+    .then(result => {
+      const tweets = result.rows;
+      const politicalTotals = tweets.reduce((a, c) => {
+        a.libertarian += c.libertarian;
+        a.green += c.green;
+        a.liberal += c.liberal;
+        a.conservative += c.conservative;
+        return a;
+      }, {libertarian: 0, green: 0, liberal: 0, conservative: 0});
+      console.log(politicalTotals);
+      return res.render('pages/political/show', {
+        politicalTotals,
+        colormap: generateColorMap(0.5)
+      });
+    })
+    .catch(err => handleError(err));
+}
+
+function personality(req, res) {
+  return res.send('personality');
+}
 
 // ============================
+// Error 404
+app.get('/*', function(req, res) {
+  res.status(404).render('pages/error', {
+    message: 'This page does not exist',
+    error: '404 Page Not Found',
+  })
+});
+
+// Server error handler
+function handleError(err, res) {
+  console.error(err);
+  if (res) res.status(500).render('pages/error', {
+    message: 'Server Error',
+    error: err
+  });
+}
+
 // Helper functions
 // ============================
 function Tweet(tweet, full_text, sentiment, emotions, political, personality) {
@@ -219,22 +286,6 @@ function getStrongestEmotion(tweet) {
 
 
 
-// Error 404
-app.get('/*', function(req, res) {
-  res.status(404).render('pages/error', {
-    message: 'This page does not exist',
-    error: '404 Page Not Found',
-  })
-});
-
-// Server error handler
-function handleError(err, res) {
-  console.error(err);
-  if (res) res.status(500).render('pages/error', {
-    message: 'Server Error',
-    error: err
-  });
-}
 
 // App listening on PORT
 app.listen(PORT, () => {
