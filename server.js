@@ -10,6 +10,10 @@ const methodOverride = require('method-override');
 const indico = require('indico.io');
 indico.apiKey = process.env.INDICO_API_KEY;
 var Twitter = require('twitter');
+var Chart = require('chart.js');
+
+const createGradient = require('./dependencies/gradient');
+const generateColorMap = require('./dependencies/color-converter').generateColormap;
 
 
 // Load env vars;
@@ -49,12 +53,26 @@ app.set('view engine', 'ejs');
 // Routes
 // ============================
 
-app.get('/', home);
+app.get('/', home1);
+app.get('/:id', details);
 
 
 // ============================
 // Route handlers
 // ============================
+
+function home1(req, res) {
+  let SQL = 'SELECT * FROM tweets ORDER BY id DESC LIMIT 20';
+  pgClient.query(SQL)
+    .then(result => {
+      return res.render('pages/index', {
+        tweets: result.rows,
+        barColorMap: generateColorMap(0.3),
+        lineColorMap: generateColorMap(0.05)
+      });
+    })
+    .catch(err => handleError(err));
+}
 
 function home(req, res) {
   // check that we're  not adding repeats to the db
@@ -66,11 +84,11 @@ function home(req, res) {
       var params = {
         screen_name: 'realDonaldTrump',
         trim_user: true,
-        exclude_replies: true,
+        exclude_replies: false,
         include_rts: false,
-        count: 200,
+        count: 20,
         tweet_mode: 'extended',
-        since_id: 1.09073103629888e+18
+        since_id: 1.09073103735588e+18
       };
       twitterClient.get('statuses/user_timeline', params)
         .then(tweets => {
@@ -79,7 +97,7 @@ function home(req, res) {
 
           // if all tweets have been stored, retrieve them and render page
           if (filteredTweets.length === 0) {
-            let SQL = 'SELECT * FROM tweets';
+            let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
             pgClient.query(SQL)
               .then(result => {
                 return res.render('pages/index', {tweets: result.rows});
@@ -88,6 +106,7 @@ function home(req, res) {
 
           // otherwise continue on to analyze and store the new ones
           } else {
+            // replace the html ampersand code with an &
             const fullTexts = filteredTweets.map(t => t.full_text.replace(/&amp;/g, '&'));
 
             // get sentiment_hq
@@ -130,7 +149,7 @@ function home(req, res) {
                               .then(result => {
                                 console.log(result);
 
-                                let SQL = 'SELECT * FROM tweets';
+                                let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
                                 pgClient.query(SQL)
                                   .then(result => {
                                     res.render('pages/index', {tweets: result.rows});
@@ -151,7 +170,16 @@ function home(req, res) {
         .catch(err => handleError(err));
     })
     .catch(err => handleError(err));
+}
 
+
+function details(req, res) {
+  const SQL = `SELECT * FROM tweets WHERE id=${req.params.id};`;
+  pgClient.query(SQL)
+    .then(result => {
+      res.render('pages/details/show', {tweet: result.rows[0]});
+    })
+    .catch(err => handleError(err));
 }
 
 

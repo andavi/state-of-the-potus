@@ -1,7 +1,21 @@
 .tweet {
   border: 1px solid black;
   border-radius: 10px;
+}
+
+.preview {
   padding: 5px;
   margin: 10px;
   width: 200px;
+  cursor: pointer;
+}
+
+.full {
+  padding: 15px;
+  width: 80%;
+}
+
+.barChartContainer {
+  width: 300px;
+  margin: auto;
 }

@@ -11,3 +11,7 @@
   background-color: white;
   z-index: 1;
 }
+
+a.preview-wrapper {
+  color: black;
+}
