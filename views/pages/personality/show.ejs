@@ -1,0 +1,17 @@
+<html lang="en">
+<%- include('../../layout/head') %>
+<body>
+  <div class="content">
+    <%- include('../../layout/header') %>
+    <main>
+      <p id="hider"><</p>
+      <%- include('../../layout/aside') %>
+      <%- include('../../layout/banner', {heading: 'Personality Text Analysis'}) %>
+      <section>
+        <%- include('personality-polar', {personalityTotals, persoColorMap}) %>
+      </section>
+    </main>
+  </div>
+  <%- include('../../layout/footer') %>
+</body>
+</html>

@@ -15,6 +15,7 @@ var Twitter = require('twitter');
 // const createGradient = require('./dependencies/gradient');
 const emotionsColorMap = require('./dependencies/color-converter').emotionsColorMap;
 const poliColorMap = require('./dependencies/color-converter').politicalColorMap;
+const persoColorMap = require('./dependencies/color-converter').persoColorMap;
 
 
 // Load env vars;
@@ -55,9 +56,9 @@ app.set('view engine', 'ejs');
 // ============================
 // This is a same route handler that won't make API calls
 // For deployed version for now
-app.get('/', homeNoAPIs);
+// app.get('/', homeNoAPIs);
 
-// app.get('/', home);
+app.get('/', home);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
@@ -233,7 +234,24 @@ function political(req, res) {
 }
 
 function personality(req, res) {
-  return res.send('personality');
+  const SQL = 'SELECT extraversion, openness, agreeableness, conscientiousness FROM tweets;';
+  pgClient.query(SQL)
+    .then(result => {
+      const tweets = result.rows;
+      const personalityTotals = tweets.reduce((a, c) => {
+        a.extraversion += c.extraversion;
+        a.openness += c.openness;
+        a.agreeableness += c.agreeableness;
+        a.conscientiousness += c.conscientiousness;
+        return a;
+      }, {extraversion: 0, openness: 0, agreeableness: 0, conscientiousness: 0});
+      console.log(personalityTotals);
+      return res.render('pages/personality/show', {
+        personalityTotals,
+        persoColorMap
+      });
+    })
+    .catch(err => handleError(err));
 }
 
 // ============================

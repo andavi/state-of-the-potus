@@ -1,0 +1,47 @@
+<div class="persoPolarContainer">
+    <canvas id="persoPolar"></canvas>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+  <script>
+    window.onload = function () {
+      // This creates normal js object to work wth
+      const totals = <%- JSON.stringify(personalityTotals) %>;
+      const poliColorMap = <%- JSON.stringify(persoColorMap) %>;
+      var ctx = document.getElementById("persoPolar");
+      var myChart = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+          labels: ["Extraversion", "Openness", "Agreeableness", "Concientiousness"],
+          datasets: [{
+            label: 'Personality Text Analysis',
+            data: [totals.extraversion, totals.openness, totals.agreeableness, totals.conscientiousness],
+            backgroundColor: [
+              poliColorMap.extraversion[1],
+              poliColorMap.openness[1],
+              poliColorMap.agreeableness[1],
+              poliColorMap.conscientiousness[1],
+            ],
+            borderColor: [
+              poliColorMap.extraversion[0],
+              poliColorMap.openness[0],
+              poliColorMap.agreeableness[0],
+              poliColorMap.conscientiousness[0],
+
+            ],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }
+  </script>
