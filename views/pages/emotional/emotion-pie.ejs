@@ -11,7 +11,7 @@
       const colorMap = <%- JSON.stringify(emotionColorMap) %>;
       var ctx = document.getElementById("emotionPie");
       var myChart = new Chart(ctx, {
-        type: 'polarArea',
+        type: 'doughnut',
         data: {
           labels: ["Anger", "Fear", "Joy", "Sadness", "Surprise"],
           datasets: [{
@@ -32,7 +32,7 @@
               colorMap.surprise[0]
 
             ],
-            borderWidth: 2
+            borderWidth: 1
           }]
         },
         options: {

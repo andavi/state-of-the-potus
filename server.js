@@ -56,9 +56,9 @@ app.set('view engine', 'ejs');
 // ============================
 // This is a same route handler that won't make API calls
 // For deployed version for now
-// app.get('/', homeNoAPIs);
+app.get('/', homeNoAPIs);
 
-app.get('/', home);
+// app.get('/', home);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
