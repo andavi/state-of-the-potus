@@ -53,8 +53,11 @@ app.set('view engine', 'ejs');
 // ============================
 // Routes
 // ============================
+// This is a same route handler that won't make API calls
+// For deployed version for now
+app.get('/', homeNoAPIs);
 
-app.get('/', home);
+// app.get('/', home);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
@@ -72,7 +75,7 @@ app.get('/:id', details);
 //   getStrongestEmotion
 // };
 
-function home1(req, res) {
+function homeNoAPIs(req, res) {
   let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
   pgClient.query(SQL)
     .then(result => {
@@ -111,7 +114,6 @@ function home(req, res) {
             let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
             pgClient.query(SQL)
               .then(result => {
-                // console.log('this ...homeArgs worked')
                 return res.render('pages/home/index', {
                   tweets: result.rows,
                   barColorMap: emotionsColorMap,
@@ -197,7 +199,6 @@ function details(req, res) {
   const SQL = `SELECT * FROM tweets WHERE id=${req.params.id};`;
   pgClient.query(SQL)
     .then(result => {
-      console.log(result.rows[0]);
       return res.render('pages/details/show', {
         tweet: result.rows[0],
         barColorMap: emotionsColorMap,
@@ -212,9 +213,7 @@ function emotional(req, res) {
 }
 
 function political(req, res) {
-  // console.log(generatePoliticalColorMap(0.5))
   const SQL = 'SELECT libertarian, green, liberal, conservative FROM tweets;';
-  console.log(SQL);
   pgClient.query(SQL)
     .then(result => {
       const tweets = result.rows;
@@ -225,7 +224,6 @@ function political(req, res) {
         a.conservative += c.conservative;
         return a;
       }, {libertarian: 0, green: 0, liberal: 0, conservative: 0});
-      console.log(politicalTotals);
       return res.render('pages/political/show', {
         politicalTotals,
         poliColorMap: poliColorMap

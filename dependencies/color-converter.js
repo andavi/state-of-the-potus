@@ -62,6 +62,13 @@ const politicalParties = [
   'conservative'
 ];
 
+const personalityTraits = [
+  'extraversion',
+  'openness',
+  'agreeableness',
+  'conscientiousness'
+];
+
 // =======================================
 // keeping different color palettes here
 // get my colors here: https://javier.xyz/cohesive-colors/
