@@ -7,9 +7,9 @@
     <main>
       <p id="hider"><</p>
       <%- include('../../layout/aside') %>
-      <%- include('../../layout/banner', {heading: 'Tweet Details'}) %>
+      <%- include('../../layout/banner', {heading: 'Poltical Text Analysis'}) %>
       <section>
-        <%- include('full', {tweet, colormap: barColorMap, emotion}) %>
+        <%- include('politicalDonut', {politicalTotals, poliColorMap}) %>
       </section>
     </main>
   </div>

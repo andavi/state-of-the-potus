@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('../layout/head') %>
+<%- include('../../layout/head') %>
 <body>
   <div class="content">
-    <%- include('../layout/header') %>
+    <%- include('../../layout/header') %>
     <main>
       <p id="hider"><</p>
-      <%- include('../layout/aside') %>
+      <%- include('../../layout/aside') %>
 
-      <%- include('../layout/banner', {heading: `Home - ${tweets.length} tweets and counting`}) %>
+      <%- include('../../layout/banner', {heading: `Home - ${tweets.length} tweets and counting`}) %>
 
       <%
       const table = {anger: 'Angry', fear: 'Fearful', joy: 'Joyful', sadness: 'Sad', surprise: 'Surprised'};
@@ -18,13 +18,13 @@
 
       <section>
         <% tweets.forEach(tweet => { %>
-          <%- include('partials/preview', {tweet, emotion: getStrongestEmotion(tweet)[0]}) %>
+          <%- include('preview', {tweet, emotion: getStrongestEmotion(tweet)[0]}) %>
         <% }) %>
       </section>
 
 
     </main>
   </div>
-  <%- include('../layout/footer') %>
+  <%- include('../../layout/footer') %>
 </body>
 </html>

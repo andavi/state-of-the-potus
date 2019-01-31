@@ -23,3 +23,81 @@ h1 a {
 h1 a:hover {
   text-decoration: underline;
 }
+
+
+.anger {
+  border-color: rgba(216, 51, 50, 1);
+}
+.fear {
+  border-color: rgba(252, 221, 93, 1);
+}
+.joy {
+  border-color: rgba(91, 190, 222, 1);
+}
+.sadness {
+  border-color: rgba(62, 69, 90, 1);
+}
+.surprise {
+  border-color: rgba(161, 86, 151, 1);
+}
+.anger hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
+  border-top: 1px solid rgba(216, 51, 50, 1);
+}
+.fear hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
+  border-top: 1px solid rgba(252, 221, 93, 1);
+}
+.joy hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
+  border-top: 1px solid rgba(91, 190, 222, 1);
+}
+.sadness hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
+  border-top: 1px solid rgba(62, 69, 90, 1);
+}
+.surprise hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
+  border-color: 1px solid rgba(161, 86, 151, 1);
+}
+#status.anger a{
+  color: rgba(216, 51, 50, 1);
+}
+#status.fear a{
+  color: rgba(252, 221, 93, 1);
+}
+#status.joy a{
+  color: rgba(91, 190, 222, 1);
+}
+#status.sadness a{
+  color: rgba(62, 69, 90, 1);
+}
+#status.surprise a{
+  color: rgba(161, 86, 151, 1);
+}
+
+#status {
+  font-family: fantasy;
+  font-size: 175%;
+  font-weight: bold;
+}
