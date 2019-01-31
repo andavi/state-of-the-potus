@@ -8,7 +8,13 @@
       <p id="hider"><</p>
       <%- include('../layout/aside') %>
 
-      <%- include('../layout/banner', {heading: `Home Page - ${tweets.length} Tweets`}) %>
+      <%- include('../layout/banner', {heading: `Home - ${tweets.length} tweets and counting`}) %>
+
+      <%
+      const table = {anger: 'Angry', fear: 'Fearful', joy: 'Joyful', sadness: 'Sad', surprise: 'Surprised'};
+      const recentEmotion = getStrongestEmotion(tweets[0])[0];
+      %>
+      <h3><%- `Based on the best information available, the current State of the POTUS is: <div class="${recentEmotion}" id="status"><a href="/${tweets[0].id}">${table[recentEmotion]}</a></div>` %></h3>
 
       <section>
         <% tweets.forEach(tweet => { %>

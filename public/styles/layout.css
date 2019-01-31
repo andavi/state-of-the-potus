@@ -76,3 +76,24 @@
   padding: 0;
   border-color: 1px solid rgba(161, 86, 151, 1);
 }
+#status.anger a{
+  color: rgba(216, 51, 50, 1);
+}
+#status.fear a{
+  color: rgba(252, 221, 93, 1);
+}
+#status.joy a{
+  color: rgba(91, 190, 222, 1);
+}
+#status.sadness a{
+  color: rgba(62, 69, 90, 1);
+}
+#status.surprise a{
+  color: rgba(161, 86, 151, 1);
+}
+
+#status {
+  font-family: fantasy;
+  font-size: 175%;
+  font-weight: bold;
+}
