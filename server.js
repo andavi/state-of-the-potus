@@ -13,8 +13,9 @@ var Twitter = require('twitter');
 // var Chart = require('chart.js');
 
 // const createGradient = require('./dependencies/gradient');
-const emotionsColorMap = require('./dependencies/color-converter').emotionsColorMap;
+const emotionColorMap = require('./dependencies/color-converter').emotionColorMap;
 const poliColorMap = require('./dependencies/color-converter').politicalColorMap;
+const persoColorMap = require('./dependencies/color-converter').persoColorMap;
 
 
 // Load env vars;
@@ -81,7 +82,7 @@ function homeNoAPIs(req, res) {
     .then(result => {
       return res.render('pages/home/index', {
         tweets: result.rows,
-        barColorMap: emotionsColorMap,
+        barColorMap: emotionColorMap,
         getStrongestEmotion
       });
     })
@@ -116,7 +117,7 @@ function home(req, res) {
               .then(result => {
                 return res.render('pages/home/index', {
                   tweets: result.rows,
-                  barColorMap: emotionsColorMap,
+                  barColorMap: emotionColorMap,
                   getStrongestEmotion
                 });
               })
@@ -172,7 +173,7 @@ function home(req, res) {
                                   .then(result => {
                                     return res.render('pages/home/index', {
                                       tweets: result.rows,
-                                      barColorMap: emotionsColorMap,
+                                      barColorMap: emotionColorMap,
                                       getStrongestEmotion
                                     });
                                   })
@@ -201,7 +202,7 @@ function details(req, res) {
     .then(result => {
       return res.render('pages/details/show', {
         tweet: result.rows[0],
-        barColorMap: emotionsColorMap,
+        barColorMap: emotionColorMap,
         emotion: getStrongestEmotion(result.rows[0])[0]
       });
     })
@@ -209,7 +210,25 @@ function details(req, res) {
 }
 
 function emotional(req, res) {
-  return res.send('emotional');
+  const SQL = 'SELECT anger, fear, joy, sadness, surprise FROM tweets;';
+  pgClient.query(SQL)
+    .then(result => {
+      const tweets = result.rows;
+      const emotionTotals = tweets.reduce((a, c) => {
+        a.anger += c.anger;
+        a.fear += c.fear;
+        a.joy += c.joy;
+        a.sadness += c.sadness;
+        a.surprise += c.surprise;
+        return a;
+      }, {anger: 0, fear: 0, joy: 0, sadness: 0, surprise: 0});
+      console.log(emotionTotals);
+      return res.render('pages/emotional/show', {
+        emotionTotals,
+        emotionColorMap
+      });
+    })
+    .catch(err => handleError(err));
 }
 
 function political(req, res) {
@@ -233,7 +252,24 @@ function political(req, res) {
 }
 
 function personality(req, res) {
-  return res.send('personality');
+  const SQL = 'SELECT extraversion, openness, agreeableness, conscientiousness FROM tweets;';
+  pgClient.query(SQL)
+    .then(result => {
+      const tweets = result.rows;
+      const personalityTotals = tweets.reduce((a, c) => {
+        a.extraversion += c.extraversion;
+        a.openness += c.openness;
+        a.agreeableness += c.agreeableness;
+        a.conscientiousness += c.conscientiousness;
+        return a;
+      }, {extraversion: 0, openness: 0, agreeableness: 0, conscientiousness: 0});
+      console.log(personalityTotals);
+      return res.render('pages/personality/show', {
+        personalityTotals,
+        persoColorMap
+      });
+    })
+    .catch(err => handleError(err));
 }
 
 // ============================
