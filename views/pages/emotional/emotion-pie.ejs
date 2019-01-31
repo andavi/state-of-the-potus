@@ -1,0 +1,49 @@
+<div class="emotionPieContainer">
+    <canvas id="emotionPie"></canvas>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+  <script>
+    window.onload = function () {
+      // This creates normal js object to work wth
+      const totals = <%- JSON.stringify(emotionTotals) %>;
+      const colorMap = <%- JSON.stringify(emotionColorMap) %>;
+      var ctx = document.getElementById("emotionPie");
+      var myChart = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+          labels: ["Anger", "Fear", "Joy", "Sadness", "Surprise"],
+          datasets: [{
+            label: 'Emotional Text Analysis',
+            data: [totals.anger, totals.fear, totals.joy, totals.sadness, totals.surprise],
+            backgroundColor: [
+              colorMap.anger[1],
+              colorMap.fear[1],
+              colorMap.joy[1],
+              colorMap.sadness[1],
+              colorMap.surprise[1]
+            ],
+            borderColor: [
+              colorMap.anger[0],
+              colorMap.fear[0],
+              colorMap.joy[0],
+              colorMap.sadness[0],
+              colorMap.surprise[0]
+
+            ],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }
+  </script>

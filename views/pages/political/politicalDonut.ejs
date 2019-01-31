@@ -10,7 +10,7 @@
     const poliColorMap = <%- JSON.stringify(poliColorMap) %>;
     var ctx = document.getElementById("poliDonut");
     var myChart = new Chart(ctx, {
-      type: 'doughnut',
+      type: 'polarArea',
       data: {
         labels: ["Libertarian", "Green", "Liberal", "Conservative"],
         datasets: [{
