@@ -62,7 +62,7 @@ app.get('/:id', details);
 // ============================
 
 function home1(req, res) {
-  let SQL = 'SELECT * FROM tweets ORDER BY id DESC LIMIT 20';
+  let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
   pgClient.query(SQL)
     .then(result => {
       return res.render('pages/index', {
@@ -177,7 +177,10 @@ function details(req, res) {
   const SQL = `SELECT * FROM tweets WHERE id=${req.params.id};`;
   pgClient.query(SQL)
     .then(result => {
-      res.render('pages/details/show', {tweet: result.rows[0]});
+      res.render('pages/details/show', {
+        tweet: result.rows[0],
+        barColorMap: generateColorMap(0.3),
+      });
     })
     .catch(err => handleError(err));
 }
