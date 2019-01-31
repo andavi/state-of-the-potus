@@ -13,7 +13,8 @@ var Twitter = require('twitter');
 // var Chart = require('chart.js');
 
 // const createGradient = require('./dependencies/gradient');
-const generateColorMap = require('./dependencies/color-converter').generateColormap;
+const generateColorMap = require('./dependencies/color-converter').generateColorMap;
+const generatePoliticalColorMap = require('./dependencies/color-converter').generatePoliticalColorMap;
 
 
 // Load env vars;
@@ -229,7 +230,7 @@ function political(req, res) {
       console.log(politicalTotals);
       return res.render('pages/political/show', {
         politicalTotals,
-        colormap: generateColorMap(0.5)
+        colormap: generatePoliticalColorMap(0.5)
       });
     })
     .catch(err => handleError(err));

@@ -48,21 +48,33 @@ function generateColorMap (hexListString, opacity) {
     'sadness': 0,
     'surprise': 2
   };
-  const politicals = [
-    'libertarian',
-    'green',
-    'liberal',
-    'conservative'
-  ];
+
   const colormap = {};
   for (let e of Object.keys(emotions)) {
     colormap[e] = pairs[emotions[e]];
   }
   return colormap;
 }
-      // for (let i in politicals) {
-      //   colormap[politicals[i]] = pairs[i];
-      // }
+
+const politicalParties = [
+  'libertarian',
+  'green',
+  'liberal',
+  'conservative'
+];
+
+function generatePoliticalColorMap (hexListString, opacity) {
+  const pairs = hexListString.split(', ').map(hex => {
+    return [
+      rgbToRgba.apply({opacity: 1}, [hexToRgb(hex)]),
+      rgbToRgba.apply({opacity: opacity}, [hexToRgb(hex)])
+    ];
+  });
+  const poliColorMap = politicalParties.map((p,i) => ({p: pairs[i]}));
+  return poliColorMap;
+}
+
+
 
 
 // =======================================
@@ -75,7 +87,7 @@ const gentleGtoR = '#92A0A4, #ADAFA8, #E4D0B1, #E4AAAB, #E488A4, #C16F6D'; // be
 const pinksToGreens = '#FE2A57, #FB788C, #F6BAA1, #AFB39D, #4B918D, #3D494A';
 const standard = '#3E455A, #A4CF4C, #A15697, #D83332, #FCDD5D, #5BBEDE';
 const standardHalfDark = '#2B303F, #94C635, #913C85, #D12423, #FCD741, #3FB3D8';
-const political = '#E5E34B, #66CA89, #4DA0BD, #E96767';
+const politicalHexes = '#E5E34B, #66CA89, #4DA0BD, #E96767';
 
 // =======================================
 
@@ -87,5 +99,6 @@ const political = '#E5E34B, #66CA89, #4DA0BD, #E96767';
 module.exports = {
   hexToRgb,
   hexToRGBa,
-  generateColormap: o => generateColorMap(standard, o)
+  generateColormap: o => generateColorMap(standard, o),
+  generatePoliticalColorMap: o => generatePoliticalColorMap(politicalHexes, o)
 }

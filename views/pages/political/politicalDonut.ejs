@@ -6,8 +6,9 @@
   <script>
     window.onload = function () {
       // This creates normal js object to work wth
-          const totals = <%- JSON.stringy(politicalTotals %>;
-          colormap = <%- JSON.stringify(colormap) %>;
+          const totals = <%- JSON.stringify(politicalTotals) %>;
+          const colormap = <%- JSON.stringify(colormap) %>;
+      console.log(colormap[2].p[0]);
 
       var ctx = document.getElementById("poliDonut");
       var myChart = new Chart(ctx, {
@@ -18,16 +19,17 @@
                   label: 'Political Text Analysis',
                   data: [totals.libertarian, totals.green, totals.liberal, totals.conservative],
                   backgroundColor: [
-                      colormap['libertarian'][1],
-                      colormap['green'][1],
-                      colormap['liberal'][1],
-                      colormap['conservative'][1],
+                      colormap[0].p[1],
+                      colormap[1].p[1],
+                      colormap[2].p[1],
+                      colormap[3].p[1],
                   ],
                   borderColor: [
-                      colormap['libertarian'][0],
-                      colormap['green'][0],
-                      colormap['liberal'][0],
-                      colormap['conservative'][0],
+                      colormap[0].p[0],
+                      colormap[1].p[0],
+                      colormap[2].p[0],
+                      colormap[3].p[0]
+
                   ],
                   borderWidth: 2
               }]
