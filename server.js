@@ -56,9 +56,9 @@ app.set('view engine', 'ejs');
 // ============================
 // This is a same route handler that won't make API calls
 // For deployed version for now
-app.get('/', homeNoAPIs);
+// app.get('/', homeNoAPIs);
 
-// app.get('/', home);
+app.get('/', home);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
@@ -68,13 +68,6 @@ app.get('/:id', details);
 // ============================
 // Route handlers
 // ============================
-
-// useful global object for passing into index render
-// const homeArgs = {
-//   barColorMap: generateColorMap(0.2),
-//   lineColorMap: generateColorMap(0.05),
-//   getStrongestEmotion
-// };
 
 function homeNoAPIs(req, res) {
   let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
@@ -272,23 +265,6 @@ function personality(req, res) {
     .catch(err => handleError(err));
 }
 
-// ============================
-// Error 404
-app.get('/*', function(req, res) {
-  res.status(404).render('pages/error', {
-    message: 'This page does not exist',
-    error: '404 Page Not Found',
-  })
-});
-
-// Server error handler
-function handleError(err, res) {
-  console.error(err);
-  if (res) res.status(500).render('pages/error', {
-    message: 'Server Error',
-    error: err
-  });
-}
 
 // Helper functions
 // ============================
@@ -317,6 +293,23 @@ function getStrongestEmotion(tweet) {
   return Object.entries(tweet).filter(([k]) => emotions.includes(k)).sort((a, b) => b[1] - a[1])[0];
 }
 
+// ============================
+// Error 404
+app.get('/*', function(req, res) {
+  res.status(404).render('pages/error', {
+    message: 'This page does not exist',
+    error: '404 Page Not Found',
+  })
+});
+
+// Server error handler
+function handleError(err, res) {
+  console.error(err);
+  if (res) res.status(500).render('pages/error', {
+    message: 'Server Error',
+    error: err
+  });
+}
 
 
 
