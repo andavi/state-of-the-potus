@@ -6,6 +6,6 @@ This is a web app which attempts to analyze the president's tweets using Indico 
 * [indico](https://indico.io/)
   - Uses the SentimentHQ, Emotion, Political, and Personality APIs to analyze the text
 * [Twitter API](https://developer.twitter.com/en/docs.html)
-  - Uses the search user feed API to collect the tweets
+  - Uses the user_timeline API to collect the tweets
 * [Cohesive Colors](https://javier.xyz/cohesive-colors/)
   - Has been a great tool for selecting the colors for the graph

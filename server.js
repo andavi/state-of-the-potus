@@ -58,7 +58,7 @@ app.set('view engine', 'ejs');
 // For deployed version for now
 // app.get('/', homeNoAPIs);
 
-app.get('/', homeNoAPIs);
+app.get('/', home);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
@@ -96,7 +96,7 @@ function home(req, res) {
         include_rts: false,
         count: 20,
         tweet_mode: 'extended',
-        since_id: 1.09073103735588e+18
+        // since_id: 1.09073103735588e+18
       };
       twitterClient.get('statuses/user_timeline', params)
         .then(tweets => {
@@ -109,7 +109,7 @@ function home(req, res) {
             pgClient.query(SQL)
               .then(result => {
                 return res.render('pages/home/index', {
-                  tweets: result.rows,
+                  tweets: result.rows.map(row => new Tweet(row)),
                   barColorMap: emotionColorMap,
                   getStrongestEmotion
                 });
@@ -165,7 +165,7 @@ function home(req, res) {
                                 pgClient.query(SQL)
                                   .then(result => {
                                     return res.render('pages/home/index', {
-                                      tweets: result.rows,
+                                      tweets: result.rows.map(row => new Tweet(row)),
                                       barColorMap: emotionColorMap,
                                       getStrongestEmotion
                                     });
@@ -266,7 +266,8 @@ function personality(req, res) {
 }
 
 
-// Helper functions
+// ============================
+// Constructors
 // ============================
 // normalize data for db insertion
 function Row(tweet, full_text, sentiment, emotions, political, personality) {
@@ -316,6 +317,10 @@ function Tweet(row) {
   }
 }
 
+// ============================
+// Helper Functions
+// ============================
+
 // function getStrongestEmotion(tweet) {
 //   const emotions = ['anger', 'fear', 'joy', 'sadness', 'surprise'];
 //   return Object.entries(tweet).filter(([k]) => emotions.includes(k)).sort((a, b) => b[1] - a[1])[0];
@@ -325,6 +330,8 @@ function getStrongestEmotion(emotion) {
   return Object.entries(emotion).sort((a, b) => b[1] - a[1])[0][0];
 }
 
+// ============================
+// Error handlers
 // ============================
 // Error 404
 app.get('/*', function(req, res) {
@@ -344,7 +351,9 @@ function handleError(err, res) {
 }
 
 
-
+// ============================
+// Listener
+// ============================
 // App listening on PORT
 app.listen(PORT, () => {
   console.log(`server is up on port : ${PORT}`);
