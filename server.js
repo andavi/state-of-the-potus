@@ -58,7 +58,7 @@ app.set('view engine', 'ejs');
 // For deployed version for now
 // app.get('/', homeNoAPIs);
 
-app.get('/', home);
+app.get('/', homeNoAPIs);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
@@ -74,7 +74,7 @@ function homeNoAPIs(req, res) {
   pgClient.query(SQL)
     .then(result => {
       return res.render('pages/home/index', {
-        tweets: result.rows,
+        tweets: result.rows.map(row => new Tweet(row)),
         barColorMap: emotionColorMap,
         getStrongestEmotion
       });
@@ -140,7 +140,7 @@ function home(req, res) {
                             // normalize the tweets to the information we want
                             const normalizedTweets = [];
                             for (let i in filteredTweets) {
-                              const normTweet = new Tweet(
+                              const normTweet = new Row(
                                 filteredTweets[i],
                                 fullTexts[i],
                                 sentimentArr[i],
@@ -268,7 +268,8 @@ function personality(req, res) {
 
 // Helper functions
 // ============================
-function Tweet(tweet, full_text, sentiment, emotions, political, personality) {
+// normalize data for db insertion
+function Row(tweet, full_text, sentiment, emotions, political, personality) {
   this.created_at = new Date(tweet.created_at);
   this.id = tweet.id;
   this.full_text = full_text;
@@ -288,9 +289,40 @@ function Tweet(tweet, full_text, sentiment, emotions, political, personality) {
   this.conscientiousness = personality.conscientiousness;
 }
 
-function getStrongestEmotion(tweet) {
-  const emotions = ['anger', 'fear', 'joy', 'sadness', 'surprise'];
-  return Object.entries(tweet).filter(([k]) => emotions.includes(k)).sort((a, b) => b[1] - a[1])[0];
+// normalize data on db extraction
+function Tweet(row) {
+  this.created_at = row.created_at;
+  this.id = row.id;
+  this.full_text = row.full_text;
+  this.sentiment = row.sentiment;
+  this.emotion = {
+    anger: row.anger,
+    fear: row.fear,
+    joy: row.joy,
+    sadness: row.sadness,
+    surprise: row.surprise
+  }
+  this.political = {
+    libertarian: row.libertarian,
+    green: row.green,
+    liberal: row.liberal,
+    conservative: row.conservative
+  }
+  this.personality = {
+    extraversion: this.extraversion,
+    openness: this.openness,
+    agreeableness: this.agreeableness,
+    conscientiousness: this.conscientiousness
+  }
+}
+
+// function getStrongestEmotion(tweet) {
+//   const emotions = ['anger', 'fear', 'joy', 'sadness', 'surprise'];
+//   return Object.entries(tweet).filter(([k]) => emotions.includes(k)).sort((a, b) => b[1] - a[1])[0];
+// }
+
+function getStrongestEmotion(emotion) {
+  return Object.entries(emotion).sort((a, b) => b[1] - a[1])[0][0];
 }
 
 // ============================
