@@ -208,17 +208,8 @@ function emotional(req, res) {
   pgClient.query(SQL)
     .then(result => {
       const emotions = result.rows.map(row => new Tweet(row).emotion);
-      const emotionTotals = emotions.reduce((a, c) => {
-        a.anger += c.anger;
-        a.fear += c.fear;
-        a.joy += c.joy;
-        a.sadness += c.sadness;
-        a.surprise += c.surprise;
-        return a;
-      }, {anger: 0, fear: 0, joy: 0, sadness: 0, surprise: 0});
-      // console.log(emotionTotals);
       return res.render('pages/emotional/show', {
-        emotionTotals,
+        averages: getAverages(emotions),
         emotionColorMap
       });
     })
@@ -230,15 +221,8 @@ function political(req, res) {
   pgClient.query(SQL)
     .then(result => {
       const politicals = result.rows.map(row => new Tweet(row).political);
-      const politicalTotals = politicals.reduce((a, c) => {
-        a.libertarian += c.libertarian;
-        a.green += c.green;
-        a.liberal += c.liberal;
-        a.conservative += c.conservative;
-        return a;
-      }, {libertarian: 0, green: 0, liberal: 0, conservative: 0});
       return res.render('pages/political/show', {
-        politicalTotals,
+        averages: getAverages(politicals),
         poliColorMap: poliColorMap
       });
     })
@@ -250,17 +234,8 @@ function personality(req, res) {
   pgClient.query(SQL)
     .then(result => {
       const personalities = result.rows.map(row => new Tweet(row).personality);
-      // console.log(personalities);
-      const personalityTotals = personalities.reduce((a, c) => {
-        a.extraversion += c.extraversion;
-        a.openness += c.openness;
-        a.agreeableness += c.agreeableness;
-        a.conscientiousness += c.conscientiousness;
-        return a;
-      }, {extraversion: 0, openness: 0, agreeableness: 0, conscientiousness: 0});
-      // console.log(personalityTotals);
       return res.render('pages/personality/show', {
-        personalityTotals,
+        averages: getAverages(personalities),
         persoColorMap
       });
     })
@@ -323,13 +298,23 @@ function Tweet(row) {
 // Helper Functions
 // ============================
 
-// function getStrongestEmotion(tweet) {
-//   const emotions = ['anger', 'fear', 'joy', 'sadness', 'surprise'];
-//   return Object.entries(tweet).filter(([k]) => emotions.includes(k)).sort((a, b) => b[1] - a[1])[0];
-// }
-
 function getStrongestEmotion(emotion) {
   return Object.entries(emotion).sort((a, b) => b[1] - a[1])[0][0];
+}
+
+function getAverages(traitGroups) {
+  const total = traitGroups.length;
+  const traits = Object.keys(traitGroups[0]);
+  const traitsTotals = traitGroups.reduce((acc, group) => {
+    traits.forEach(trait => {
+      acc[trait] += group[trait];
+    });
+    return acc;
+  });
+  Object.keys(traitsTotals).forEach(trait => {
+    traitsTotals[trait] /= total;
+  });
+  return traitsTotals;
 }
 
 // ============================

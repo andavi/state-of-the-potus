@@ -7,7 +7,7 @@
   <script>
     window.onload = function () {
       // This creates normal js object to work wth
-      const totals = <%- JSON.stringify(personalityTotals) %>;
+      const averages = <%- JSON.stringify(averages) %>;
       const poliColorMap = <%- JSON.stringify(persoColorMap) %>;
       var ctx = document.getElementById("persoPolar");
       var myChart = new Chart(ctx, {
@@ -16,7 +16,7 @@
           labels: ["Extraversion", "Openness", "Agreeableness", "Concientiousness"],
           datasets: [{
             label: 'Personality Text Analysis',
-            data: [totals.extraversion, totals.openness, totals.agreeableness, totals.conscientiousness],
+            data: [averages.extraversion, averages.openness, averages.agreeableness, averages.conscientiousness],
             backgroundColor: [
               poliColorMap.extraversion[1],
               poliColorMap.openness[1],
