@@ -11,7 +11,7 @@
       const poliColorMap = <%- JSON.stringify(persoColorMap) %>;
       var ctx = document.getElementById("persoPolar");
       var myChart = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'polarArea',
         data: {
           labels: ["Extraversion", "Openness", "Agreeableness", "Concientiousness"],
           datasets: [{

@@ -26,74 +26,82 @@ h1 a:hover {
 
 
 .anger {
-  border-color: rgba(216, 51, 50, 1);
+  border-color: var(--anger);
 }
 .fear {
-  border-color: rgba(252, 221, 93, 1);
+  border-color: var(--fear);
 }
 .joy {
-  border-color: rgba(91, 190, 222, 1);
+  border-color: var(--joy);
 }
 .sadness {
-  border-color: rgba(62, 69, 90, 1);
+  border-color: var(--sadness);
 }
 .surprise {
-  border-color: rgba(161, 86, 151, 1);
+  border-color: var(--surprise);
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  margin: 1em 0;
+  padding: 0;
 }
 .anger hr {
-  display: block;
+  /* display: block;
   height: 1px;
   border: 0;
   margin: 1em 0;
-  padding: 0;
-  border-top: 1px solid rgba(216, 51, 50, 1);
+  padding: 0; */
+  border-top: 2px solid var(--anger);
 }
 .fear hr {
-  display: block;
+  /* display: block;
   height: 1px;
   border: 0;
   margin: 1em 0;
-  padding: 0;
-  border-top: 1px solid rgba(252, 221, 93, 1);
+  padding: 0; */
+  border-top: 2px solid var(--fear);
 }
 .joy hr {
-  display: block;
+  /* display: block;
   height: 1px;
   border: 0;
   margin: 1em 0;
-  padding: 0;
-  border-top: 1px solid rgba(91, 190, 222, 1);
+  padding: 0; */
+  border-top: 2px solid var(--joy);
 }
 .sadness hr {
-  display: block;
+  /* display: block;
   height: 1px;
   border: 0;
   margin: 1em 0;
-  padding: 0;
-  border-top: 1px solid rgba(62, 69, 90, 1);
+  padding: 0; */
+  border-top: 2px solid var(--sadness);
 }
 .surprise hr {
-  display: block;
+  /* display: block;
   height: 1px;
   border: 0;
   margin: 1em 0;
-  padding: 0;
-  border-color: 1px solid rgba(161, 86, 151, 1);
+  padding: 0; */
+  border-color: 2px solid var(--surprise);
 }
 #status.anger a{
-  color: rgba(216, 51, 50, 1);
+  color: var(--anger);
 }
 #status.fear a{
-  color: rgba(252, 221, 93, 1);
+  color: var(--fear);
 }
 #status.joy a{
-  color: rgba(91, 190, 222, 1);
+  color: var(--joy);
 }
 #status.sadness a{
-  color: rgba(62, 69, 90, 1);
+  color: var(--sadness);
 }
 #status.surprise a{
-  color: rgba(161, 86, 151, 1);
+  color: var(--surprise);
 }
 
 #status {

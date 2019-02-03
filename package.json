@@ -23,7 +23,6 @@
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
-    "eslint": "^5.12.1",
     "express": "^4.16.4",
     "indico.io": "^0.10.5",
     "method-override": "^3.0.0",
@@ -31,5 +30,8 @@
     "pg-format": "^1.0.4",
     "superagent": "^4.1.0",
     "twitter": "^1.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^5.13.0"
   }
 }

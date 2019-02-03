@@ -1,3 +1,22 @@
+:root {
+  --sentiment: rgba(183, 89, 210, 1);
+  --anger: rgba(204, 66, 30, 1);
+  --fear: rgba(23, 141, 37, 1);
+  --joy: rgba(228, 223, 83, 1);
+  --sadness: rgba(48, 59, 179, 1);
+  --surprise: rgba(77, 186, 197, 1);
+
+  --libertarian: rgba(229, 227, 75, 1);
+  --green: rgba(102, 202, 137, 1);
+  --liberal: rgba(77, 160, 189, 1);
+  --conservative: rgba(233, 103, 103, 1);
+
+  --extraversion: rgba(218, 170, 90, 1);
+  --openness: rgba(88, 204, 180, 1);
+  --agreeableness: rgba(190, 125, 218, 1);
+  --conscientiousness: rgba(206, 41, 96, 1);
+ }
+
 html, body {
   height: 100%;
 }
