@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 // Load Dependencies
 const express = require('express');
