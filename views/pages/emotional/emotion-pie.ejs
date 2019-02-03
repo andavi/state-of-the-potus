@@ -7,7 +7,7 @@
   <script>
     window.onload = function () {
       // This creates normal js object to work wth
-      const totals = <%- JSON.stringify(emotionTotals) %>;
+      const averages = <%- JSON.stringify(averages) %>;
       const colorMap = <%- JSON.stringify(emotionColorMap) %>;
       var ctx = document.getElementById("emotionPie");
       var myChart = new Chart(ctx, {
@@ -16,7 +16,7 @@
           labels: ["Anger", "Fear", "Joy", "Sadness", "Surprise"],
           datasets: [{
             label: 'Emotional Text Analysis',
-            data: [totals.anger, totals.fear, totals.joy, totals.sadness, totals.surprise],
+            data: [averages.anger, averages.fear, averages.joy, averages.sadness, averages.surprise],
             backgroundColor: [
               colorMap.anger[1],
               colorMap.fear[1],

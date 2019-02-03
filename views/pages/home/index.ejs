@@ -12,7 +12,7 @@
 
       <%
       const table = {anger: 'Angry', fear: 'Fearful', joy: 'Joyful', sadness: 'Sad', surprise: 'Surprised'};
-      const recentEmotion = getStrongestEmotion(tweets[0])[0];
+      const recentEmotion = getStrongestEmotion(tweets[0].emotion);
       %>
       <%- `<div class="${recentEmotion}" id="status"><h1><a href="/${tweets[0].id}">${table[recentEmotion]}</a></h1></div>` %>
 
@@ -20,7 +20,7 @@
 
       <section>
         <% tweets.forEach(tweet => { %>
-          <%- include('preview', {tweet, emotion: getStrongestEmotion(tweet)[0]}) %>
+          <%- include('preview', {tweet, emotion: getStrongestEmotion(tweet.emotion)}) %>
         <% }) %>
       </section>
 
