@@ -193,21 +193,22 @@ function details(req, res) {
   const SQL = `SELECT * FROM tweets WHERE id=${req.params.id};`;
   pgClient.query(SQL)
     .then(result => {
+      const tweet = new Tweet(result.rows[0]);
       return res.render('pages/details/show', {
-        tweet: result.rows[0],
+        tweet,
         barColorMap: emotionColorMap,
-        emotion: getStrongestEmotion(result.rows[0])[0]
+        emotion: getStrongestEmotion(tweet.emotion)
       });
     })
     .catch(err => handleError(err));
 }
 
 function emotional(req, res) {
-  const SQL = 'SELECT anger, fear, joy, sadness, surprise FROM tweets;';
+  const SQL = 'SELECT * FROM tweets;';
   pgClient.query(SQL)
     .then(result => {
-      const tweets = result.rows;
-      const emotionTotals = tweets.reduce((a, c) => {
+      const emotions = result.rows.map(row => new Tweet(row).emotion);
+      const emotionTotals = emotions.reduce((a, c) => {
         a.anger += c.anger;
         a.fear += c.fear;
         a.joy += c.joy;
@@ -215,7 +216,7 @@ function emotional(req, res) {
         a.surprise += c.surprise;
         return a;
       }, {anger: 0, fear: 0, joy: 0, sadness: 0, surprise: 0});
-      console.log(emotionTotals);
+      // console.log(emotionTotals);
       return res.render('pages/emotional/show', {
         emotionTotals,
         emotionColorMap
@@ -225,11 +226,11 @@ function emotional(req, res) {
 }
 
 function political(req, res) {
-  const SQL = 'SELECT libertarian, green, liberal, conservative FROM tweets;';
+  const SQL = 'SELECT * FROM tweets;';
   pgClient.query(SQL)
     .then(result => {
-      const tweets = result.rows;
-      const politicalTotals = tweets.reduce((a, c) => {
+      const politicals = result.rows.map(row => new Tweet(row).political);
+      const politicalTotals = politicals.reduce((a, c) => {
         a.libertarian += c.libertarian;
         a.green += c.green;
         a.liberal += c.liberal;
@@ -245,18 +246,19 @@ function political(req, res) {
 }
 
 function personality(req, res) {
-  const SQL = 'SELECT extraversion, openness, agreeableness, conscientiousness FROM tweets;';
+  const SQL = 'SELECT * FROM tweets;';
   pgClient.query(SQL)
     .then(result => {
-      const tweets = result.rows;
-      const personalityTotals = tweets.reduce((a, c) => {
+      const personalities = result.rows.map(row => new Tweet(row).personality);
+      // console.log(personalities);
+      const personalityTotals = personalities.reduce((a, c) => {
         a.extraversion += c.extraversion;
         a.openness += c.openness;
         a.agreeableness += c.agreeableness;
         a.conscientiousness += c.conscientiousness;
         return a;
       }, {extraversion: 0, openness: 0, agreeableness: 0, conscientiousness: 0});
-      console.log(personalityTotals);
+      // console.log(personalityTotals);
       return res.render('pages/personality/show', {
         personalityTotals,
         persoColorMap
@@ -310,10 +312,10 @@ function Tweet(row) {
     conservative: row.conservative
   }
   this.personality = {
-    extraversion: this.extraversion,
-    openness: this.openness,
-    agreeableness: this.agreeableness,
-    conscientiousness: this.conscientiousness
+    extraversion: row.extraversion,
+    openness: row.openness,
+    agreeableness: row.agreeableness,
+    conscientiousness: row.conscientiousness
   }
 }
 

@@ -12,7 +12,7 @@
             labels: ["Sadness", "Surprise", "Anger", "Fear", "Joy"],
             datasets: [{
                 label: 'Emotional Matrix Analysis',
-                data: [tweet.sadness, tweet.surprise, tweet.anger, tweet.fear, tweet.joy],
+                data: [tweet.emotion.sadness, tweet.emotion.surprise, tweet.emotion.anger, tweet.emotion.fear, tweet.emotion.joy],
                 backgroundColor: [
                     colormap.sadness[1],
                     // colormap.sentiment[1],
