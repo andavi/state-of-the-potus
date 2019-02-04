@@ -52,6 +52,7 @@ section {
 aside {
   width: 175px;
   overflow: scroll;
+  height: 700px;
   float: right;
 }
 footer {

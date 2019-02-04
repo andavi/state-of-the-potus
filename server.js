@@ -99,7 +99,7 @@ function home(req, res) {
       };
       twitterClient.get('statuses/user_timeline', params)
         .then(tweets => {
-          console.log(tweets);
+          // console.log(tweets);
           // not keeping tweets that have links or are repeats
           const filteredTweets = tweets.filter(t => t.entities.urls.length === 0 && !repeatIds.includes(t.id));
 
