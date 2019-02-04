@@ -91,16 +91,16 @@ const newPersonalities = '#DAAA5A, #58CCB4, #BE7DDA, #CE2960';
 const emotionWheel = '#CC421E, #178D25, #E4DF53, #4DBAC5, #303BB3, #B759D2';
 // =======================================
 
-const emotionColorMap = generateColorMap(emotionWheel, .3, emotions);
-const politicalColorMap = generateColorMap(politicalHexes, .5, politicalParties);
-const persoColorMap = generateColorMap(newPersonalities, .6, personalityTraits);
+const emotionColorMap = generateColorMap(emotionWheel, .4, emotions);
+const politicalColorMap = generateColorMap(politicalHexes, .4, politicalParties);
+const personalityColorMap = generateColorMap(newPersonalities, .4, personalityTraits);
 // console.log('emotion', emotionColorMap);
 // console.log('political:', politicalColorMap);
-// console.log('peronality:', persoColorMap);
+// console.log('personality:', personalityColorMap);
 
 
 module.exports = {
   emotionColorMap,
   politicalColorMap,
-  persoColorMap
+  personalityColorMap
 }

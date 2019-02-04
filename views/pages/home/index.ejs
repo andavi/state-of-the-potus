@@ -8,11 +8,11 @@
       <p id="hider"><</p>
       <%- include('../../layout/aside') %>
 
-      <%- include('../../layout/banner', {heading: `The State of the POTUS is`}) %>
+      <%- include('../../layout/banner', {heading: `The State of the POTUS is...`}) %>
 
       <%
       const table = {anger: 'Angry', fear: 'Fearful', joy: 'Joyful', sadness: 'Sad', surprise: 'Surprised'};
-      const recentEmotion = getStrongestEmotion(tweets[0].emotion);
+      const recentEmotion = tweets[0].dominantEmotion;
       %>
       <%- `<div class="${recentEmotion}" id="status"><h1><a href="/${tweets[0].id}">${table[recentEmotion]}</a></h1></div>` %>
 
@@ -20,7 +20,7 @@
 
       <section>
         <% tweets.forEach(tweet => { %>
-          <%- include('preview', {tweet, emotion: getStrongestEmotion(tweet.emotion)}) %>
+          <%- include('preview', {tweet}) %>
         <% }) %>
       </section>
 
