@@ -93,12 +93,13 @@ function home(req, res) {
         trim_user: true,
         exclude_replies: false,
         include_rts: false,
-        count: 20,
+        count: 5,
         tweet_mode: 'extended',
         // since_id: 1.09073103735588e+18
       };
       twitterClient.get('statuses/user_timeline', params)
         .then(tweets => {
+          console.log(tweets);
           // not keeping tweets that have links or are repeats
           const filteredTweets = tweets.filter(t => t.entities.urls.length === 0 && !repeatIds.includes(t.id));
 
@@ -245,7 +246,7 @@ function personality(req, res) {
 // ============================
 // normalize data for db insertion
 function Row(tweet, full_text, sentiment, emotions, political, personality) {
-  this.created_at = new Date(tweet.created_at);
+  this.created_at = tweet.created_at;
   this.id = tweet.id;
   this.full_text = full_text;
   this.sentiment = sentiment;

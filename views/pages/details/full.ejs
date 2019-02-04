@@ -1,6 +1,6 @@
 <div class="tweet full <%= emotion %>" id="full-<%=tweet.id %>">
   <h4><em><%= tweet.created_at.toDateString() %></em></h4>
-  <small><%= tweet.created_at.toTimeString().split('(')[0] %></small>
+  <small><%= tweet.created_at.toLocaleTimeString() %></small>
 
   <%- include('barChart') %>
 

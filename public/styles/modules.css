@@ -24,20 +24,63 @@ h1 a:hover {
   text-decoration: underline;
 }
 
+/* Start - Trait Colors */
+/* Emotions */
+span.anger {
+  color: var(--anger);
+}
+span.fear {
+  color: var(--fear);
+}
+span.joy {
+  color: var(--joy);
+}
+span.sadness {
+  color: var(--sadness);
+}
+span.surprise {
+  color: var(--surprise);
+}
+/* Political */
+span.libertarian {
+  color: var(--libertarian);
+}
+span.green {
+  color: var(--green);
+}
+span.green {
+  color: var(--green);
+}
+span.conservative {
+  color: var(--conservative);
+}
+/* Personality */
+span.extraversion {
+  color: var(--extraversion);
+}
+span.openness {
+  color: var(--openness);
+}
+span.agreeableness {
+  color: var(--agreeableness);
+}
+span.conscientiousness {
+  color: var(--conscientiousness);
+}
 
-.anger {
+div.anger {
   border-color: var(--anger);
 }
-.fear {
+div.fear {
   border-color: var(--fear);
 }
-.joy {
+div.joy {
   border-color: var(--joy);
 }
-.sadness {
+div.sadness {
   border-color: var(--sadness);
 }
-.surprise {
+div.surprise {
   border-color: var(--surprise);
 }
 

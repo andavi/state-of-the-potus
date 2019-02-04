@@ -1,7 +1,7 @@
 <a class="preview-wrapper" href="/<%= tweet.id %>">
   <div class="tweet preview <%= tweet.dominantEmotion %>" id="preview-<%=tweet.id %>">
     <h4><em><%= tweet.created_at.toDateString() %></em></h4>
-    <small><%= tweet.created_at.toTimeString().split('(')[0] %></small>
+    <small><%= tweet.created_at.toLocaleTimeString() %></small>
     <hr>
     <p><%= tweet.full_text.split(' ').slice(0, 10).join(' ') + '...' %></p>
   </div>
