@@ -14,8 +14,8 @@ var Twitter = require('twitter');
 
 // const createGradient = require('./dependencies/gradient');
 const emotionColorMap = require('./dependencies/color-converter').emotionColorMap;
-const poliColorMap = require('./dependencies/color-converter').politicalColorMap;
-const persoColorMap = require('./dependencies/color-converter').persoColorMap;
+const politicalColorMap = require('./dependencies/color-converter').politicalColorMap;
+const personalityColorMap = require('./dependencies/color-converter').personalityColorMap;
 
 
 // Load env vars;
@@ -75,8 +75,7 @@ function homeNoAPIs(req, res) {
     .then(result => {
       return res.render('pages/home/index', {
         tweets: result.rows.map(row => new Tweet(row)),
-        barColorMap: emotionColorMap,
-        getStrongestEmotion
+        emotionColorMap
       });
     })
     .catch(err => handleError(err));
@@ -94,12 +93,13 @@ function home(req, res) {
         trim_user: true,
         exclude_replies: false,
         include_rts: false,
-        count: 20,
+        count: 5,
         tweet_mode: 'extended',
         // since_id: 1.09073103735588e+18
       };
       twitterClient.get('statuses/user_timeline', params)
         .then(tweets => {
+          // console.log(tweets);
           // not keeping tweets that have links or are repeats
           const filteredTweets = tweets.filter(t => t.entities.urls.length === 0 && !repeatIds.includes(t.id));
 
@@ -111,7 +111,6 @@ function home(req, res) {
                 return res.render('pages/home/index', {
                   tweets: result.rows.map(row => new Tweet(row)),
                   barColorMap: emotionColorMap,
-                  getStrongestEmotion
                 });
               })
               .catch(err => handleError(err));
@@ -167,7 +166,6 @@ function home(req, res) {
                                     return res.render('pages/home/index', {
                                       tweets: result.rows.map(row => new Tweet(row)),
                                       barColorMap: emotionColorMap,
-                                      getStrongestEmotion
                                     });
                                   })
                                   .catch(err => handleError(err));
@@ -196,8 +194,9 @@ function details(req, res) {
       const tweet = new Tweet(result.rows[0]);
       return res.render('pages/details/show', {
         tweet,
-        barColorMap: emotionColorMap,
-        emotion: getStrongestEmotion(tweet.emotion)
+        emotionColorMap,
+        politicalColorMap,
+        personalityColorMap
       });
     })
     .catch(err => handleError(err));
@@ -223,7 +222,7 @@ function political(req, res) {
       const politicals = result.rows.map(row => new Tweet(row).political);
       return res.render('pages/political/show', {
         averages: getAverages(politicals),
-        poliColorMap: poliColorMap
+        poliColorMap: politicalColorMap
       });
     })
     .catch(err => handleError(err));
@@ -236,7 +235,7 @@ function personality(req, res) {
       const personalities = result.rows.map(row => new Tweet(row).personality);
       return res.render('pages/personality/show', {
         averages: getAverages(personalities),
-        persoColorMap
+        personalityColorMap
       });
     })
     .catch(err => handleError(err));
@@ -248,7 +247,7 @@ function personality(req, res) {
 // ============================
 // normalize data for db insertion
 function Row(tweet, full_text, sentiment, emotions, political, personality) {
-  this.created_at = new Date(tweet.created_at);
+  this.created_at = tweet.created_at;
   this.id = tweet.id;
   this.full_text = full_text;
   this.sentiment = sentiment;
@@ -280,26 +279,29 @@ function Tweet(row) {
     sadness: row.sadness,
     surprise: row.surprise
   }
+  this.dominantEmotion = getDominantTrait(this.emotion);
   this.political = {
     libertarian: row.libertarian,
     green: row.green,
     liberal: row.liberal,
     conservative: row.conservative
   }
+  this.dominantPolitical = getDominantTrait(this.political);
   this.personality = {
     extraversion: row.extraversion,
     openness: row.openness,
     agreeableness: row.agreeableness,
     conscientiousness: row.conscientiousness
   }
+  this.dominantPersonality = getDominantTrait(this.personality);
 }
 
 // ============================
 // Helper Functions
 // ============================
 
-function getStrongestEmotion(emotion) {
-  return Object.entries(emotion).sort((a, b) => b[1] - a[1])[0][0];
+function getDominantTrait(traitObj) {
+  return Object.entries(traitObj).sort((a, b) => b[1] - a[1])[0][0];
 }
 
 function getAverages(traitGroups) {

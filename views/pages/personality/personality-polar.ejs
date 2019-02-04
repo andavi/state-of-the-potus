@@ -1,47 +1,47 @@
 <div class="persoPolarContainer">
-    <canvas id="persoPolar"></canvas>
-  </div>
+  <canvas id="persoPolar"></canvas>
+</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 
-  <script>
-    window.onload = function () {
-      // This creates normal js object to work wth
-      const averages = <%- JSON.stringify(averages) %>;
-      const poliColorMap = <%- JSON.stringify(persoColorMap) %>;
-      var ctx = document.getElementById("persoPolar");
-      var myChart = new Chart(ctx, {
-        type: 'polarArea',
-        data: {
-          labels: ["Extraversion", "Openness", "Agreeableness", "Concientiousness"],
-          datasets: [{
-            label: 'Personality Text Analysis',
-            data: [averages.extraversion, averages.openness, averages.agreeableness, averages.conscientiousness],
-            backgroundColor: [
-              poliColorMap.extraversion[1],
-              poliColorMap.openness[1],
-              poliColorMap.agreeableness[1],
-              poliColorMap.conscientiousness[1],
-            ],
-            borderColor: [
-              poliColorMap.extraversion[0],
-              poliColorMap.openness[0],
-              poliColorMap.agreeableness[0],
-              poliColorMap.conscientiousness[0],
+<script>
+  window.onload = function () {
+    // This creates normal js object to work wth
+    const averages = <%- JSON.stringify(averages) %>;
+    const personalityColorMap = <%- JSON.stringify(personalityColorMap) %>;
+    var ctx = document.getElementById("persoPolar");
+    var myChart = new Chart(ctx, {
+      type: 'polarArea',
+      data: {
+        labels: ["Extraversion", "Openness", "Agreeableness", "Concientiousness"],
+        datasets: [{
+          label: 'Personality Text Analysis',
+          data: [averages.extraversion, averages.openness, averages.agreeableness, averages.conscientiousness],
+          backgroundColor: [
+            personalityColorMap.extraversion[1],
+            personalityColorMap.openness[1],
+            personalityColorMap.agreeableness[1],
+            personalityColorMap.conscientiousness[1],
+          ],
+          borderColor: [
+            personalityColorMap.extraversion[0],
+            personalityColorMap.openness[0],
+            personalityColorMap.agreeableness[0],
+            personalityColorMap.conscientiousness[0],
 
-            ],
-            borderWidth: 1
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
           }]
-        },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
         }
-      });
-    }
-  </script>
+      }
+    });
+  }
+</script>

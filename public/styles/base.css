@@ -52,6 +52,7 @@ section {
 aside {
   width: 175px;
   overflow: scroll;
+  height: 700px;
   float: right;
 }
 footer {
@@ -75,6 +76,10 @@ h3 {
 h4 {
   font-size: 110%;
 }
+h5 {
+  font-size: 95%;
+  font-weight: 500;
+}
 p {
   margin-bottom: 10px;
 }
@@ -92,4 +97,12 @@ a:hover {
 
 em {
   font-style: italic;
+}
+
+strong {
+  font-weight: bold;
+}
+
+span.underline {
+  text-decoration: underline;
 }

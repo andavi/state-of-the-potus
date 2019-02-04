@@ -1,52 +1,149 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 <script>
-  window.onload = function () {
-    // This creates normal js object to work wth
-        tweet = <%- JSON.stringify(tweet) %>;
-        colormap = <%- JSON.stringify(colormap) %>;
+    window.onload = function () {
+        // This creates normal js object to work wth
+        const tweet = <%- JSON.stringify(tweet) %>;
+        const emotionColorMap = <%- JSON.stringify(emotionColorMap) %>;
+        const politicalColorMap = <%- JSON.stringify(politicalColorMap) %>;
+        const personalityColorMap = <%- JSON.stringify(personalityColorMap) %>;
 
-    var ctx = document.getElementById("barChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Sadness", "Surprise", "Anger", "Fear", "Joy"],
-            datasets: [{
-                label: 'Emotional Matrix Analysis',
-                data: [tweet.emotion.sadness, tweet.emotion.surprise, tweet.emotion.anger, tweet.emotion.fear, tweet.emotion.joy],
-                backgroundColor: [
-                    colormap.sadness[1],
-                    // colormap.sentiment[1],
-                    colormap.surprise[1],
-                    colormap.anger[1],
-                    colormap.fear[1],
-                    colormap.joy[1]
-                ],
-                borderColor: [
-                    colormap.sadness[0],
-                    // colormap.sentiment[0],
-                    colormap.surprise[0],
-                    colormap.anger[0],
-                    colormap.fear[0],
-                    colormap.joy[0]
-                ],
-                borderWidth: 2
-            },{
-                label: 'Sentiment Measurement',
-                data: new Array(5).fill(tweet.sentiment),
-                backgroundColor: 'rgba(183, 89, 210, 0.05)',
-                borderColor: colormap.sentiment[0],
-                type: 'line'
+
+        // Emotion Bar Chart
+        const emotionCtx = document.getElementById("emotionBarChart");
+        const emotionBarChart = new Chart(emotionCtx, {
+            type: 'bar',
+            data: {
+                labels: ["Sadness", "Surprise", "Anger", "Fear", "Joy"],
+                datasets: [{
+                    label: 'Emotion Expressed',
+                    data: [tweet.emotion.sadness, tweet.emotion.surprise, tweet.emotion.anger, tweet.emotion.fear, tweet.emotion.joy],
+                    backgroundColor: [
+                        emotionColorMap.sadness[1],
+                        emotionColorMap.surprise[1],
+                        emotionColorMap.anger[1],
+                        emotionColorMap.fear[1],
+                        emotionColorMap.joy[1]
+                    ],
+                    borderColor: [
+                        emotionColorMap.sadness[0],
+                        emotionColorMap.surprise[0],
+                        emotionColorMap.anger[0],
+                        emotionColorMap.fear[0],
+                        emotionColorMap.joy[0]
+                    ],
+                    borderWidth: 2
+                }, {
+                    label: 'Sentiment Measurement',
+                    data: new Array(5).fill(tweet.sentiment),
+                    backgroundColor: 'rgba(183, 89, 210, 0.05)',
+                    borderColor: emotionColorMap.sentiment[0],
+                    type: 'line'
                 }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Sentiment and Emotion Expressed Prediction'
+                },
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        barThickness: 'flex',
+                    }]
+                }
             }
-        }
-    });
-  }
+        });
+
+
+        // Personality Bar Chart
+        const personalityCtx = document.getElementById("personalityBarChart");
+        const personalityBarChart = new Chart(personalityCtx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ["Extraversion", "Openness", "Agreeableness", "Conscientiousness"],
+                datasets: [{
+                    label: 'Personality Trait Expressed',
+                    data: [tweet.personality.extraversion, tweet.personality.openness, tweet.personality.agreeableness, tweet.personality.conscientiousness],
+                    backgroundColor: [
+                        personalityColorMap.extraversion[1],
+                        personalityColorMap.openness[1],
+                        personalityColorMap.agreeableness[1],
+                        personalityColorMap.conscientiousness[1],
+                    ],
+                    borderColor: [
+                        personalityColorMap.extraversion[0],
+                        personalityColorMap.openness[0],
+                        personalityColorMap.agreeableness[0],
+                        personalityColorMap.conscientiousness[0]
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Personality Traits Assessment'
+                },
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        // Political Bar Chart
+        const politicalCtx = document.getElementById("politicalBarChart");
+        const politicalBarChart = new Chart(politicalCtx, {
+            type: 'horizontalBar',
+            data: {
+                labels: ["Libertarian", "Green", "Liberal", "Conservative"],
+                datasets: [{
+                    label: 'Political Leaning Probability',
+                    data: [tweet.political.libertarian, tweet.political.green, tweet.political.liberal, tweet.political.conservative],
+                    backgroundColor: [
+                        politicalColorMap.libertarian[1],
+                        politicalColorMap.green[1],
+                        politicalColorMap.liberal[1],
+                        politicalColorMap.conservative[1],
+                    ],
+                    borderColor: [
+                        politicalColorMap.libertarian[0],
+                        politicalColorMap.green[0],
+                        politicalColorMap.liberal[0],
+                        politicalColorMap.conservative[0]
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: 'Political Learning Prediction'
+                },
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
 </script>
