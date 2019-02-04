@@ -75,8 +75,7 @@ function homeNoAPIs(req, res) {
     .then(result => {
       return res.render('pages/home/index', {
         tweets: result.rows.map(row => new Tweet(row)),
-        barColorMap: emotionColorMap,
-        getStrongestEmotion
+        barColorMap: emotionColorMap
       });
     })
     .catch(err => handleError(err));
@@ -111,7 +110,6 @@ function home(req, res) {
                 return res.render('pages/home/index', {
                   tweets: result.rows.map(row => new Tweet(row)),
                   barColorMap: emotionColorMap,
-                  getStrongestEmotion
                 });
               })
               .catch(err => handleError(err));
@@ -167,7 +165,6 @@ function home(req, res) {
                                     return res.render('pages/home/index', {
                                       tweets: result.rows.map(row => new Tweet(row)),
                                       barColorMap: emotionColorMap,
-                                      getStrongestEmotion
                                     });
                                   })
                                   .catch(err => handleError(err));
@@ -197,7 +194,7 @@ function details(req, res) {
       return res.render('pages/details/show', {
         tweet,
         barColorMap: emotionColorMap,
-        emotion: getStrongestEmotion(tweet.emotion)
+        emotion: getDominantTrait(tweet.emotion)
       });
     })
     .catch(err => handleError(err));
@@ -280,26 +277,29 @@ function Tweet(row) {
     sadness: row.sadness,
     surprise: row.surprise
   }
+  this.dominantEmotion = getDominantTrait(this.emotion);
   this.political = {
     libertarian: row.libertarian,
     green: row.green,
     liberal: row.liberal,
     conservative: row.conservative
   }
+  this.dominantPolitical = getDominantTrait(this.political);
   this.personality = {
     extraversion: row.extraversion,
     openness: row.openness,
     agreeableness: row.agreeableness,
     conscientiousness: row.conscientiousness
   }
+  this.dominantPersonality = getDominantTrait(this.political);
 }
 
 // ============================
 // Helper Functions
 // ============================
 
-function getStrongestEmotion(emotion) {
-  return Object.entries(emotion).sort((a, b) => b[1] - a[1])[0][0];
+function getDominantTrait(traitObj) {
+  return Object.entries(traitObj).sort((a, b) => b[1] - a[1])[0][0];
 }
 
 function getAverages(traitGroups) {

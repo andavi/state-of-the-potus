@@ -49,43 +49,18 @@ hr {
   padding: 0;
 }
 .anger hr {
-  /* display: block;
-  height: 1px;
-  border: 0;
-  margin: 1em 0;
-  padding: 0; */
   border-top: 2px solid var(--anger);
 }
 .fear hr {
-  /* display: block;
-  height: 1px;
-  border: 0;
-  margin: 1em 0;
-  padding: 0; */
   border-top: 2px solid var(--fear);
 }
 .joy hr {
-  /* display: block;
-  height: 1px;
-  border: 0;
-  margin: 1em 0;
-  padding: 0; */
   border-top: 2px solid var(--joy);
 }
 .sadness hr {
-  /* display: block;
-  height: 1px;
-  border: 0;
-  margin: 1em 0;
-  padding: 0; */
   border-top: 2px solid var(--sadness);
 }
 .surprise hr {
-  /* display: block;
-  height: 1px;
-  border: 0;
-  margin: 1em 0;
-  padding: 0; */
   border-top: 2px solid var(--surprise);
 }
 #status.anger a{
