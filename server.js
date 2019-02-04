@@ -14,8 +14,8 @@ var Twitter = require('twitter');
 
 // const createGradient = require('./dependencies/gradient');
 const emotionColorMap = require('./dependencies/color-converter').emotionColorMap;
-const poliColorMap = require('./dependencies/color-converter').politicalColorMap;
-const persoColorMap = require('./dependencies/color-converter').persoColorMap;
+const politicalColorMap = require('./dependencies/color-converter').politicalColorMap;
+const personalityColorMap = require('./dependencies/color-converter').personalityColorMap;
 
 
 // Load env vars;
@@ -75,7 +75,7 @@ function homeNoAPIs(req, res) {
     .then(result => {
       return res.render('pages/home/index', {
         tweets: result.rows.map(row => new Tweet(row)),
-        barColorMap: emotionColorMap
+        emotionColorMap
       });
     })
     .catch(err => handleError(err));
@@ -194,8 +194,9 @@ function details(req, res) {
       const tweet = new Tweet(result.rows[0]);
       return res.render('pages/details/show', {
         tweet,
-        barColorMap: emotionColorMap,
-        emotion: getDominantTrait(tweet.emotion)
+        emotionColorMap,
+        politicalColorMap,
+        personalityColorMap
       });
     })
     .catch(err => handleError(err));
@@ -221,7 +222,7 @@ function political(req, res) {
       const politicals = result.rows.map(row => new Tweet(row).political);
       return res.render('pages/political/show', {
         averages: getAverages(politicals),
-        poliColorMap: poliColorMap
+        poliColorMap: politicalColorMap
       });
     })
     .catch(err => handleError(err));
@@ -234,7 +235,7 @@ function personality(req, res) {
       const personalities = result.rows.map(row => new Tweet(row).personality);
       return res.render('pages/personality/show', {
         averages: getAverages(personalities),
-        persoColorMap
+        personalityColorMap
       });
     })
     .catch(err => handleError(err));

@@ -1,8 +1,10 @@
-<div class="tweet full <%= emotion %>" id="full-<%=tweet.id %>">
-  <h4><em><%= tweet.created_at.toDateString() %></em></h4>
-  <small><%= tweet.created_at.toLocaleTimeString() %></small>
+<div class="tweet full <%= tweet.dominantEmotion %>" id="full-<%=tweet.id %>">
+  <div class="timestamp">
+    <h4><em><%= tweet.created_at.toDateString() %></em></h4>
+    <small><em><%= tweet.created_at.toLocaleTimeString() %></em></small>
+  </div>
 
-  <%- include('barChart') %>
+  <%- include('barCharts') %>
 
   <hr>
   <p><%= tweet.full_text %></p>

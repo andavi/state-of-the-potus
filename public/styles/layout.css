@@ -14,11 +14,25 @@
   padding: 15px;
   width: 80%;
   border-width: 3px;
+  margin: 30px;
+}
+
+.timestamp {
+  margin-bottom: 30px;
+}
+
+.barChartsContainer {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 .barChartContainer {
-  width: 500px;
-  margin: auto;
+  margin-bottom: 30px;
+}
+
+.emotionalBarChartContainer {
+  width: 400px;
 }
 
 .poliDonutContainer {
