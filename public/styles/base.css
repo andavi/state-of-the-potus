@@ -94,3 +94,7 @@ a:hover {
 em {
   font-style: italic;
 }
+
+span.underline {
+  text-decoration: underline;
+}

@@ -34,7 +34,7 @@
 }
 
 /* Start Navbar */
-ul {
+header ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -43,18 +43,18 @@ ul {
   /* height: 80px; */
 }
 
-li {
+header li {
   float: left;
   border-right:1px solid #111;
   /* height: 80px; */
 }
 
-li:last-child {
+header li:last-child {
   border-right: none;
   border-left: 1px solid #111;;
 }
 
-li a {
+header li a {
   display: block;
   color: black;
   text-align: center;
@@ -62,12 +62,12 @@ li a {
   text-decoration: none;
 }
 
-li a:hover:not(.active) {
+header li a:hover:not(.active) {
   /* background-color: #111; */
 
 }
 
-.active {
+header .active {
   /* background-color: rgb(255, 255, 255); */
   font-weight: bold;
 }

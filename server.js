@@ -292,7 +292,7 @@ function Tweet(row) {
     agreeableness: row.agreeableness,
     conscientiousness: row.conscientiousness
   }
-  this.dominantPersonality = getDominantTrait(this.political);
+  this.dominantPersonality = getDominantTrait(this.personality);
 }
 
 // ============================

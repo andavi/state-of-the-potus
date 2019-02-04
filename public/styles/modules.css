@@ -127,3 +127,7 @@ hr {
   font-size: 150%;
   font-weight: bold;
 }
+
+span.underline {
+  text-decoration: underline;
+}

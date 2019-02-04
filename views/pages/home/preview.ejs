@@ -1,7 +1,40 @@
 <a class="preview-wrapper" href="/<%= tweet.id %>">
   <div class="tweet preview <%= tweet.dominantEmotion %>" id="preview-<%=tweet.id %>">
     <h4><em><%= tweet.created_at.toDateString() %></em></h4>
-    <small><%= tweet.created_at.toLocaleTimeString() %></small>
+    <small><em><%= tweet.created_at.toLocaleTimeString() %></em></small>
+
+    <ul>
+        <li>
+            <small>
+              <span class="underline">Dominant Traits
+              </span>
+            </small>
+          </li>
+      <li>
+        <small>
+          Emotion:
+          <span class="<%= tweet.dominantEmotion %>">
+            <%= tweet.dominantEmotion.charAt(0).toUpperCase() + tweet.dominantEmotion.slice(1) %>
+          </span>
+        </small>
+      </li>
+      <li>
+          <small>
+            Political:
+            <span class="<%= tweet.dominantPolitical %>">
+              <%= tweet.dominantPolitical.charAt(0).toUpperCase() + tweet.dominantPolitical.slice(1) %>
+            </span>
+          </small>
+        </li>
+        <li>
+            <small>
+              Personality:
+              <span class="<%= tweet.dominantPersonality %>">
+                <%= tweet.dominantPersonality.charAt(0).toUpperCase() + tweet.dominantPersonality.slice(1) %>
+              </span>
+            </small>
+          </li>
+    </ul>
     <hr>
     <p><%= tweet.full_text.split(' ').slice(0, 10).join(' ') + '...' %></p>
   </div>
