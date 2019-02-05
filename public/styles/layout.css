@@ -22,7 +22,13 @@
 }
 
 .lineContainer {
-  width: 960px;
+  width: 1024px;
+  margin: 20px 0;
+}
+
+.pieContainer {
+  width: 800px;
+  margin: 20px 0;
 }
 
 .barChartsContainer {
