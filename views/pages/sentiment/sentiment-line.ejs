@@ -1,0 +1,145 @@
+<!-- <div class="barChartsContainer"> -->
+  <div class="pieContainer">
+    <canvas id="sentimentPie"></canvas>
+  </div>
+  <div class="lineContainer">
+    <canvas id="sentimentLine"></canvas>
+  </div>
+<!-- </div> -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+<script>
+  window.onload = function () {
+    // This creates normal js object to work wth
+    const tweets = <%- JSON.stringify(tweets) %>;
+    const sentimentColor = <%- JSON.stringify(sentimentColor) %>;
+
+    // Pie Chart
+    const positive = tweets.map(t => t.sentiment).reduce((a, p) => a + (p > 0.5 ? 1 : 0), 0);
+    const negative = tweets.length - positive;
+
+    var pieCtx = document.getElementById("sentimentPie");
+    var myChart = new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: ["Positive Tweets", "Negative Tweets"],
+        datasets: [{
+          label: 'Positive vs. Negative',
+          data: [positive, negative],
+          borderColor: [
+            'blue',
+            'red',
+          ],
+          backgroundColor: [
+            'rgba(0, 0, 255, 0.5)',
+            'rgba(255, 0, 0, 0.5)'
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Positive Tweets vs. Negative Tweets',
+          fontSize: 16,
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+
+    // Line Chart
+    // decimate data
+    function decimateData(n) {
+      let sentiments = tweets.map(t => t.sentiment);
+      let dates = tweets.map(t => t.created_at);
+      const decimatedSentiments = [];
+      const decimatedDates = [];
+      while(sentiments.length) {
+        const deciSent = sentiments.slice(0, n).reduce((a, s) => a + s) / sentiments.slice(0, n).length;
+        decimatedSentiments.push(deciSent)
+        sentiments = sentiments.slice(n);
+
+        decimatedDates.push(dates[0]);
+        dates = dates.slice(n);
+      }
+      return {decimatedSentiments, decimatedDates};
+    }
+
+    const decimateFactor = 100;
+
+
+    var lineCtx = document.getElementById("sentimentLine").getContext("2d");
+    var gradientStroke = lineCtx.createLinearGradient(0, 500, 0, 0);
+    gradientStroke.addColorStop(0, "red");
+    gradientStroke.addColorStop(1, "blue");
+    var chart = new Chart(lineCtx, {
+      // The type of chart we want to create
+      type: 'line',
+      // The data for our dataset
+      data: {
+        // labels: tweets.map(t => new Date(t.created_at)),
+        labels: decimateData(decimateFactor).decimatedDates,
+        datasets: [{
+          label: "Sentiment",
+          // backgroundColor: sentimentColor[1],
+
+          borderColor: sentimentColor[0],
+          fill: false,
+          // borderColor: gradientStroke,
+          // pointBorderColor: gradientStroke,
+          // pointBackgroundColor: gradientStroke,
+          // pointHoverBackgroundColor: gradientStroke,
+          // pointHoverBorderColor: gradientStroke,
+
+          // data: tweets.map(t => t.sentiment),
+          data: decimateData(decimateFactor).decimatedSentiments,
+          // borderWidth: 1,
+          showLine: true,
+          pointRadius: 4,
+          borderWidth: 2
+        }],
+      },
+      // Configuration options go here
+      options: {
+        // animation: {
+        //     duration: 0, // general animation time
+        // },
+        // hover: {
+        //     animationDuration: 0, // duration of animations when hovering an item
+        // },
+        // responsiveAnimationDuration: 0, // animation duration after a resize
+        // elements: {
+        //     line: {
+        //         tension: 0, // disables bezier curves
+        //     }
+        // },
+        legend: {
+          display: true,
+          labels: {
+            // boxWidth: 15
+          }
+        },
+        title: {
+          display: true,
+          text: `Tweet Sentiment (Decimated n=${decimateFactor}) Over Time`,
+          fontSize: 16,
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+          }]
+        }
+      }
+    });
+
+  };
+
+</script>
