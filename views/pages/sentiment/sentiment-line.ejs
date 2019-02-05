@@ -23,22 +23,27 @@
     var myChart = new Chart(pieCtx, {
       type: 'pie',
       data: {
-        labels: ["Positive", "Negative"],
+        labels: ["Positive Tweets", "Negative Tweets"],
         datasets: [{
           label: 'Positive vs. Negative',
           data: [positive, negative],
-          backgroundColor: [
+          borderColor: [
             'blue',
             'red',
           ],
-          borderColor: [
-            'blue',
-            'red'
+          backgroundColor: [
+            'rgba(0, 0, 255, 0.5)',
+            'rgba(255, 0, 0, 0.5)'
           ],
-          borderWidth: 1
+          borderWidth: 2
         }]
       },
       options: {
+        title: {
+          display: true,
+          text: 'Positive Tweets vs. Negative Tweets',
+          fontSize: 16,
+        },
         scales: {
           yAxes: [{
             ticks: {
@@ -94,9 +99,9 @@
             }
         },
         legend: {
-          display: false,
+          display: true,
           labels: {
-            boxWidth: 15
+            // boxWidth: 15
           }
         },
         title: {
