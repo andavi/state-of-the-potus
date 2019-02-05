@@ -1,0 +1,52 @@
+<div class="lineContainer">
+  <canvas id="sentimentLine"></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+<script>
+  window.onload = function () {
+    // This creates normal js object to work wth
+    const tweets = <%- JSON.stringify(tweets) %>;
+    const sentimentColor = <%- JSON.stringify(sentimentColor) %>;
+
+    var ctx = document.getElementById("sentimentLine");
+    var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'line',
+      // The data for our dataset
+      data: {
+        labels: tweets.map(t => new Date(t.created_at)),
+        datasets: [{
+          label: "Sentiment",
+          // backgroundColor: sentimentColor[1],
+          borderColor: sentimentColor[0],
+          data: tweets.map(t => t.sentiment),
+          // borderWidth: 1,
+          showLine: false,
+          pointRadius: 2
+        }],
+      },
+      // Configuration options go here
+      options: {
+        legend: {
+          labels: {
+            boxWidth: 15
+          }
+        },
+        title: {
+          display: true,
+          text: 'Tweet Sentiment Over Time'
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+            // time: {
+            //     unit: 'week'
+            // }
+          }]
+        }
+      }
+    });
+  };
+
+</script>

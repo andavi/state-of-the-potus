@@ -62,6 +62,7 @@ app.get('/', home);
 app.get('/emotional', emotional);
 app.get('/political', political);
 app.get('/personality', personality);
+app.get('/sentiment', sentiment);
 app.get('/:id', details);
 
 
@@ -236,6 +237,19 @@ function personality(req, res) {
       return res.render('pages/personality/show', {
         averages: getAverages(personalities),
         personalityColorMap
+      });
+    })
+    .catch(err => handleError(err));
+}
+
+function sentiment(req, res) {
+  const SQL = 'SELECT * FROM tweets ORDER BY created_at DESC;';
+  pgClient.query(SQL)
+    .then(result => {
+      const tweets = result.rows.map(row => new Tweet(row));
+      return res.render('pages/sentiment/show', {
+        tweets,
+        sentimentColor: emotionColorMap.sentiment
       });
     })
     .catch(err => handleError(err));
