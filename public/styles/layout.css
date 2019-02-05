@@ -21,6 +21,10 @@
   /* margin-bottom: 30px; */
 }
 
+.lineContainer {
+  width: 960px;
+}
+
 .barChartsContainer {
   display: flex;
   justify-content: space-evenly;

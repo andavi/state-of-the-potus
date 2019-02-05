@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../../layout/head') %>
+
 <body>
   <div class="content">
     <%- include('../../layout/header') %>
     <main>
-      <p id="hider"><</p>
-      <%- include('../../layout/aside') %>
-      <%- include('../../layout/banner', {heading: 'Sentiment Text Analysis'}) %>
-      <!-- <section> -->
-        <%- include('sentiment-line', {tweets, sentimentColor}) %>
-      <!-- </section> -->
+      <p id="hider">
+        <
+      </p>
+        <%- include('../../layout/aside') %>
+          <%- include('../../layout/banner', {heading: 'Sentiment Text Analysis'}) %>
+          <section>
+            <%- include('sentiment-line', {tweets, sentimentColor}) %>
+
+          </section>
     </main>
   </div>
   <%- include('../../layout/footer') %>
 </body>
+
 </html>
