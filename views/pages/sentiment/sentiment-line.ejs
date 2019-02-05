@@ -56,6 +56,26 @@
 
 
     // Line Chart
+    // decimate data
+    function decimateData(n) {
+      let sentiments = tweets.map(t => t.sentiment);
+      let dates = tweets.map(t => t.created_at);
+      const decimatedSentiments = [];
+      const decimatedDates = [];
+      while(sentiments.length) {
+        const deciSent = sentiments.slice(0, n).reduce((a, s) => a + s) / sentiments.slice(0, n).length;
+        decimatedSentiments.push(deciSent)
+        sentiments = sentiments.slice(n);
+
+        decimatedDates.push(dates[0]);
+        dates = dates.slice(n);
+      }
+      return {decimatedSentiments, decimatedDates};
+    }
+
+    const decimateFactor = 100;
+
+
     var lineCtx = document.getElementById("sentimentLine").getContext("2d");
     var gradientStroke = lineCtx.createLinearGradient(0, 500, 0, 0);
     gradientStroke.addColorStop(0, "red");
@@ -65,7 +85,8 @@
       type: 'line',
       // The data for our dataset
       data: {
-        labels: tweets.map(t => new Date(t.created_at)),
+        // labels: tweets.map(t => new Date(t.created_at)),
+        labels: decimateData(decimateFactor).decimatedDates,
         datasets: [{
           label: "Sentiment",
           // backgroundColor: sentimentColor[1],
@@ -78,26 +99,28 @@
           // pointHoverBackgroundColor: gradientStroke,
           // pointHoverBorderColor: gradientStroke,
 
-          data: tweets.map(t => t.sentiment),
+          // data: tweets.map(t => t.sentiment),
+          data: decimateData(decimateFactor).decimatedSentiments,
           // borderWidth: 1,
-          showLine: false,
-          pointRadius: 2
+          showLine: true,
+          pointRadius: 4,
+          borderWidth: 2
         }],
       },
       // Configuration options go here
       options: {
-        animation: {
-            duration: 0, // general animation time
-        },
-        hover: {
-            animationDuration: 0, // duration of animations when hovering an item
-        },
-        responsiveAnimationDuration: 0, // animation duration after a resize
-        elements: {
-            line: {
-                tension: 0, // disables bezier curves
-            }
-        },
+        // animation: {
+        //     duration: 0, // general animation time
+        // },
+        // hover: {
+        //     animationDuration: 0, // duration of animations when hovering an item
+        // },
+        // responsiveAnimationDuration: 0, // animation duration after a resize
+        // elements: {
+        //     line: {
+        //         tension: 0, // disables bezier curves
+        //     }
+        // },
         legend: {
           display: true,
           labels: {
@@ -106,7 +129,7 @@
         },
         title: {
           display: true,
-          text: 'Tweet Sentiment Over Time',
+          text: `Tweet Sentiment (Decimated n=${decimateFactor}) Over Time`,
           fontSize: 16,
         },
         scales: {
