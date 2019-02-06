@@ -2,6 +2,9 @@
   <div class="pieContainer">
     <canvas id="sentimentPie"></canvas>
   </div>
+  <div class="pieContainer">
+    <canvas id="sentimentMultiPie"></canvas>
+  </div>
   <div class="lineContainer">
     <canvas id="sentimentLine"></canvas>
   </div>
@@ -42,6 +45,56 @@
         title: {
           display: true,
           text: 'Positive Tweets vs. Negative Tweets',
+          fontSize: 16,
+        },
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+
+
+    // Multi Pie Chart
+    const veryPositive = tweets.map(t => t.sentiment).reduce((a, p) => a + (p > 0.8 ? 1 : 0), 0);
+    const lessPositive = tweets.map(t => t.sentiment).reduce((a, p) => a + ((p > 0.6 && p <= 0.8) ? 1 : 0), 0);
+    const neutral = tweets.map(t => t.sentiment).reduce((a, p) => a + ((p > 0.4 && p <= 0.6) ? 1 : 0), 0);
+    const lessNegative = tweets.map(t => t.sentiment).reduce((a, p) => a + ((p > 0.2 && p <= 0.4) ? 1 : 0), 0);
+    const veryNegative = tweets.map(t => t.sentiment).reduce((a, p) => a + ( p <= 0.2 ? 1 : 0), 0);
+
+    var pieCtx = document.getElementById("sentimentMultiPie");
+    var myChart = new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: ["Very Positive", "Less Positive", "Roughly Neutral", "Less Negative", "Very Negative"],
+        datasets: [{
+          label: 'Sentiment Further Divided',
+          data: [veryPositive, lessPositive, neutral, lessNegative, veryNegative],
+          borderColor: [
+          'rgba(0, 0, 255, 1)',
+          'rgba(63, 0, 191, 1)',
+          'rgba(127, 0, 127, 1)',
+          'rgba(191, 0, 63, 1)',
+          'rgba(255, 0, 0, 1)',
+          ],
+          backgroundColor: [
+          'rgba(0, 0, 255, .5)',
+          'rgba(63, 0, 191, .5)',
+          'rgba(127, 0, 127, .5)',
+          'rgba(191, 0, 63, .5)',
+          'rgba(255, 0, 0, .5)',
+          ],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Sentiment Further Divided',
           fontSize: 16,
         },
         scales: {
