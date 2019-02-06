@@ -142,19 +142,12 @@
         labels: decimateData(decimateFactor).decimatedDates,
         datasets: [{
           label: "Sentiment",
-          // backgroundColor: sentimentColor[1],
-
+          backgroundColor: sentimentColor[1],
           borderColor: sentimentColor[0],
           fill: false,
-          // borderColor: gradientStroke,
-          // pointBorderColor: gradientStroke,
-          // pointBackgroundColor: gradientStroke,
-          // pointHoverBackgroundColor: gradientStroke,
-          // pointHoverBorderColor: gradientStroke,
 
           // data: tweets.map(t => t.sentiment),
           data: decimateData(decimateFactor).decimatedSentiments,
-          // borderWidth: 1,
           showLine: true,
           pointRadius: 4,
           borderWidth: 2
@@ -162,18 +155,6 @@
       },
       // Configuration options go here
       options: {
-        // animation: {
-        //     duration: 0, // general animation time
-        // },
-        // hover: {
-        //     animationDuration: 0, // duration of animations when hovering an item
-        // },
-        // responsiveAnimationDuration: 0, // animation duration after a resize
-        // elements: {
-        //     line: {
-        //         tension: 0, // disables bezier curves
-        //     }
-        // },
         legend: {
           display: true,
           labels: {
