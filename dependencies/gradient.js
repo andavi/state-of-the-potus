@@ -10,7 +10,7 @@ function genNextColor(c1, c2, factor) {
   return cNew;
 }
 
-function createGradient(color1, color2, numColors) {
+function createGradient(color1, color2, numColors, opacity) {
   const stepFactor = 1 / (numColors - 1)
   const gradient = [];
   let c1 = color1.match(/\d+/g).map(Number);
@@ -18,9 +18,16 @@ function createGradient(color1, color2, numColors) {
   for (let i = 0; i < numColors; i++) {
     gradient.push(genNextColor(c1, c2, stepFactor * i));
   }
-  return gradient.map(c => `rgb(${c.join(',')})`);
+  const solids =  gradient.map(c => `rgba(${c.join(',')})`);
+  let translucents = undefined;
+  if (opacity) {
+    translucents = solids.map(solidRgba => solidRgba.replace(/\d\)/g, `${opacity})`));
+  }
+  return {solids, translucents};
 }
 
 createGradient(color1, color2, 11);
 
 module.exports = createGradient;
+
+// console.log(createGradient('rgba(255, 0, 0, 1)', 'rgba(0, 0, 255, 1)', 100, 0.4));
