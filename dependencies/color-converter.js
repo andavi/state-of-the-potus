@@ -94,9 +94,9 @@ const emotionWheel = '#CC421E, #178D25, #E4DF53, #4DBAC5, #303BB3, #B759D2';
 const emotionColorMap = generateColorMap(emotionWheel, .4, emotions);
 const politicalColorMap = generateColorMap(politicalHexes, .4, politicalParties);
 const personalityColorMap = generateColorMap(newPersonalities, .4, personalityTraits);
-console.log('emotion', emotionColorMap);
-console.log('political:', politicalColorMap);
-console.log('personality:', personalityColorMap);
+// console.log('emotion', emotionColorMap);
+// console.log('political:', politicalColorMap);
+// console.log('personality:', personalityColorMap);
 
 
 module.exports = {

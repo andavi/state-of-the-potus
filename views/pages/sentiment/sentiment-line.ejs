@@ -5,6 +5,12 @@
   <div class="pieContainer">
     <canvas id="sentimentMultiPie"></canvas>
   </div>
+  <div class="barChartContainer">
+    <canvas id="sentimentBar"></canvas>
+  </div>
+  <div class="lineAreaContainer">
+    <canvas id="sentimentLineArea"></canvas>
+  </div>
   <div class="lineContainer">
     <canvas id="sentimentLine"></canvas>
   </div>
@@ -108,6 +114,92 @@
     });
 
 
+
+    // Bar Chart categorizing sentiment
+    const sentBandsLabels = <%- JSON.stringify(sentBandsLabels) %>;
+    const sentBandsTotals = <%- JSON.stringify(sentBandsTotals) %>;
+    const sentimentGradient = <%- JSON.stringify(sentimentBarGradient) %>;
+
+
+    var barCtx = document.getElementById("sentimentBar");
+    var barChart = new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: sentBandsLabels,
+        datasets: [{
+            label: '# of Tweets',
+            data: sentBandsTotals,
+            backgroundColor: sentimentGradient.translucents,
+            borderColor: sentimentGradient.solids,
+            borderWidth: 1
+        }]
+    },
+    options: {
+      title: {
+          display: true,
+          text: `Total Tweets per Sentiment Subdivided in(n=0.01) Intervals`,
+          fontSize: 16,
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+
+
+    // Line Area Chart
+    const sentLineAreaLabels = <%- JSON.stringify(sentLineAreaLabels) %>;
+    const sentLineAreaTotals = <%- JSON.stringify(sentLineAreaTotals) %>;
+
+    var lineAreaCtx = document.getElementById("sentimentLineArea").getContext("2d");
+    var gradientStroke = lineAreaCtx.createLinearGradient(1000, 0, 100, 0);
+    gradientStroke.addColorStop(0, 'rgba(0,0,255,.5)');
+    gradientStroke.addColorStop(1, 'rgba(255,0,0,.5)');
+    var sentLineArea = new Chart(lineAreaCtx, {
+    type: 'line',
+    data: {
+        labels: sentLineAreaLabels,
+        datasets: [{
+            label: '# of Tweets',
+            data: sentLineAreaTotals,
+            borderColor:               gradientStroke,
+            pointBorderColor:          gradientStroke,
+            pointBackgroundColor:      gradientStroke,
+            pointHoverBackgroundColor: gradientStroke,
+            pointHoverBorderColor:     gradientStroke,
+            borderWidth: 1,
+            backgroundColor: gradientStroke,
+            borderColor: gradientStroke,
+            fill: true,
+        }]
+    },
+    options: {
+      title: {
+          display: true,
+          text: `Tweets per Sentiment Bounded at (n=0.05) Intervals`,
+          fontSize: 16,
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+  });
+
+
     // Line Chart
     // decimate data
     function decimateData(n) {
@@ -126,13 +218,10 @@
       return {decimatedSentiments, decimatedDates};
     }
 
-    const decimateFactor = 100;
+    const decimateFactor = 50;
 
 
     var lineCtx = document.getElementById("sentimentLine").getContext("2d");
-    var gradientStroke = lineCtx.createLinearGradient(0, 500, 0, 0);
-    gradientStroke.addColorStop(0, "red");
-    gradientStroke.addColorStop(1, "blue");
     var chart = new Chart(lineCtx, {
       // The type of chart we want to create
       type: 'line',
@@ -156,7 +245,7 @@
       // Configuration options go here
       options: {
         legend: {
-          display: true,
+          display: false,
           labels: {
             // boxWidth: 15
           }
