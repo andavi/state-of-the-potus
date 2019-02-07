@@ -19,14 +19,15 @@ function createGradient(color1, color2, numColors, opacity) {
     gradient.push(genNextColor(c1, c2, stepFactor * i));
   }
   const solids =  gradient.map(c => `rgba(${c.join(',')})`);
-  // if (opacity) {
-  //   // translucents = solids.map()
-  // }
-  return solids;
+  let translucents = undefined;
+  if (opacity) {
+    translucents = solids.map(solidRgba => solidRgba.replace(/\d\)/g, `${opacity})`));
+  }
+  return {solids, translucents};
 }
 
 createGradient(color1, color2, 11);
 
 module.exports = createGradient;
 
-console.log(createGradient('rgba(255, 0, 0, 1)', 'rgba(0, 0, 255, 1)', 10));
+console.log(createGradient('rgba(255, 0, 0, 1)', 'rgba(0, 0, 255, 1)', 100, 0.4));

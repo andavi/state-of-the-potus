@@ -12,7 +12,7 @@ indico.apiKey = process.env.INDICO_API_KEY;
 var Twitter = require('twitter');
 // var Chart = require('chart.js');
 
-// const createGradient = require('./dependencies/gradient');
+const gradient = require('./dependencies/gradient');
 const emotionColorMap = require('./dependencies/color-converter').emotionColorMap;
 const politicalColorMap = require('./dependencies/color-converter').politicalColorMap;
 const personalityColorMap = require('./dependencies/color-converter').personalityColorMap;
@@ -76,7 +76,7 @@ function homeNoAPIs(req, res) {
     .then(result => {
       return res.render('pages/home/index', {
         tweets: result.rows.map(row => new Tweet(row)),
-        emotionColorMap
+        emotionColorMap,
       });
     })
     .catch(err => handleError(err));
@@ -236,7 +236,9 @@ function personality(req, res) {
       const personalities = result.rows.map(row => new Tweet(row).personality);
       return res.render('pages/personality/show', {
         averages: getAverages(personalities),
-        personalityColorMap
+        personalityColorMap,
+
+
       });
     })
     .catch(err => handleError(err));
@@ -249,7 +251,10 @@ function sentiment(req, res) {
       const tweets = result.rows.map(row => new Tweet(row));
       return res.render('pages/sentiment/show', {
         tweets,
-        sentimentColor: emotionColorMap.sentiment
+        sentimentColor: emotionColorMap.sentiment,
+        sentimentBarGradient: gradient('rgba(255,0,0,1)', 'rgba(0,0,255,1)', 100, 0.4),
+        sentBandsTotals: getDivisions(0.01, tweets.map(t => t.sentiment)).sentBandsTotals,
+        sentBandsLabels: getDivisions(0.01, tweets.map(t => t.sentiment)).sentBandsLabels,
       });
     })
     .catch(err => handleError(err));
@@ -331,6 +336,34 @@ function getAverages(traitGroups) {
     traitsTotals[trait] /= total;
   });
   return traitsTotals;
+}
+
+// function counting number of tweets within n-width bands
+function getDivisions(n, sentiments) {
+  // const sentiments = tweets.sentiments;
+  const sentBandsTotals = [];
+  const sentBandsLabels = [];
+  let start = 0;
+  let end = n;
+  while (end <= 1) {
+    const sentsPerBand = sentiments.reduce((a, s) => {
+      a += s >= start && s < end ? 1 : 0;
+      return a;
+    }, 0);
+    sentBandsTotals.push(sentsPerBand);
+    sentBandsLabels.push(`< ${end.toFixed(2)})`);
+    start += n;
+    end += n;
+  }
+  return {sentBandsTotals, sentBandsLabels};
+}
+
+
+function initializeBandWidthBarChart(tweets, bandWidth) {
+  // const bandWidth = bandWidth;
+  const sentBandLabels = getDivisions(bandWidth, tweets.map(t => t.sentiment)).sentBandLabels;
+  const sentBandTotals = getDivisions(bandWidth, tweets.map(t => t.sentiment)).sentBandTotals;
+  return {sentBandTotals, sentBandLabels};
 }
 
 // ============================

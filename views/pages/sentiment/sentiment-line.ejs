@@ -113,67 +113,55 @@
 
 
     // Bar Chart categorizing sentiment
-    // function counting number of tweets within n-width bands
-    function getDivisions(n, sentiments) {
-      // const sentiments = tweets.sentiments;
-      const sentBandsTotals = [];
-      const sentBandsLabels = [];
-      let start = 0.0;
-      let end = n;
-      while (end <= 1) {
-        const sentsPerBand = sentiments.reduce((a, s) => {
-          a += s >= start && s < end ? 1 : 0;
-          return a;
-        }, 0);
-        sentBandsTotals.push(sentsPerBand);
-        sentBandsLabels.push(`[${start.toFixed ? start.toFixed(1) : start}, ${end.toFixed(1)})`);
-        start += n;
-        end += n;
-      }
-      return {sentBandsTotals, sentBandsLabels};
-    }
+    // // function counting number of tweets within n-width bands
+    // function getDivisions(n, sentiments) {
+    //   // const sentiments = tweets.sentiments;
+    //   const sentBandsTotals = [];
+    //   const sentBandsLabels = [];
+    //   let start = 0.0;
+    //   let end = n;
+    //   while (end <= 1) {
+    //     const sentsPerBand = sentiments.reduce((a, s) => {
+    //       a += s >= start && s < end ? 1 : 0;
+    //       return a;
+    //     }, 0);
+    //     sentBandsTotals.push(sentsPerBand);
+    //     sentBandsLabels.push(`[${start.toFixed ? start.toFixed(1) : start}, ${end.toFixed(1)})`);
+    //     start += n;
+    //     end += n;
+    //   }
+    //   return {sentBandsTotals, sentBandsLabels};
+    // }
 
-    console.log(getDivisions(.01, tweets.map(t => t.sentiment)));
+    // console.log(getDivisions(.01, tweets.map(t => t.sentiment)));
 
-    const sentBandLabels = getDivisions(.1, tweets.map(t => t.sentiment)).sentBandLabels;
-    const sentBandTotals = getDivisions(.1, tweets.map(t => t.sentiment)).sentBandTotals;
+    // const sentBandLabels = getDivisions(.1, tweets.map(t => t.sentiment)).sentBandLabels;
+    // const sentBandTotals = getDivisions(.1, tweets.map(t => t.sentiment)).sentBandTotals;
+
+    const sentBandsLabels = <%- JSON.stringify(sentBandsLabels) %>;
+    const sentBandsTotals = <%- JSON.stringify(sentBandsTotals) %>;
+    const sentimentGradient = <%- JSON.stringify(sentimentBarGradient) %>;
+
 
     var barCtx = document.getElementById("sentimentBar");
     var barChart = new Chart(barCtx, {
     type: 'bar',
     data: {
-        labels: ["[0.0, 0.1)", "[0.1, 0.2)", "[0.2, 0.3)", "[0.3, 0.4)", "[0.4, 0.5)", "[0.5, 0.6)", "[0.6, 0.7)", "[0.7, 0.8)", "[0.8, 0.9)", "[0.9, 1.0)"],
+        labels: sentBandsLabels,
         datasets: [{
             label: '# of Tweets',
-            data: [286, 174, 144, 199, 125, 133, 124, 165, 281, 748],
-            backgroundColor: [
-              'rgba(255,0,0,.5)',
-              'rgba(227,0,28,.5)',
-              'rgba(198,0,57,.5)',
-              'rgba(170,0,85,.5)',
-              'rgba(142,0,113,.5)',
-              'rgba(113,0,142,.5)',
-              'rgba(85,0,170,.5)',
-              'rgba(57,0,198,.5)',
-              'rgba(28,0,227,.5)',
-              'rgba(0,0,255,.5)'
-            ],
-            borderColor: [
-              'rgba(255,0,0,1)',
-              'rgba(227,0,28,1)',
-              'rgba(198,0,57,1)',
-              'rgba(170,0,85,1)',
-              'rgba(142,0,113,1)',
-              'rgba(113,0,142,1)',
-              'rgba(85,0,170,1)',
-              'rgba(57,0,198,1)',
-              'rgba(28,0,227,1)',
-              'rgba(0,0,255,1)'
-          ],
+            data: sentBandsTotals,
+            backgroundColor: sentimentGradient.translucents,
+            borderColor: sentimentGradient.solids,
             borderWidth: 1
         }]
     },
     options: {
+      title: {
+          display: true,
+          text: `Total Tweets per Subdivision (n=0.01)`,
+          fontSize: 16,
+        },
         scales: {
             yAxes: [{
                 ticks: {
