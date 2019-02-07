@@ -30,4 +30,4 @@ createGradient(color1, color2, 11);
 
 module.exports = createGradient;
 
-console.log(createGradient('rgba(255, 0, 0, 1)', 'rgba(0, 0, 255, 1)', 100, 0.4));
+// console.log(createGradient('rgba(255, 0, 0, 1)', 'rgba(0, 0, 255, 1)', 100, 0.4));

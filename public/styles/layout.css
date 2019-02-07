@@ -26,6 +26,11 @@
   margin: 30px 0;
 }
 
+.lineAreaContainer {
+  margin-bottom: 30px;
+  width: 1024px;
+}
+
 .pieContainer {
   width: 800px;
   margin: 30px 0;
@@ -41,6 +46,8 @@
   margin-bottom: 30px;
   width: 1024px;
 }
+
+
 
 .emotionalBarChartContainer {
   width: 350px;

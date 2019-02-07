@@ -8,6 +8,9 @@
   <div class="barChartContainer">
     <canvas id="sentimentBar"></canvas>
   </div>
+  <div class="lineAreaContainer">
+    <canvas id="sentimentLineArea"></canvas>
+  </div>
   <div class="lineContainer">
     <canvas id="sentimentLine"></canvas>
   </div>
@@ -113,31 +116,6 @@
 
 
     // Bar Chart categorizing sentiment
-    // // function counting number of tweets within n-width bands
-    // function getDivisions(n, sentiments) {
-    //   // const sentiments = tweets.sentiments;
-    //   const sentBandsTotals = [];
-    //   const sentBandsLabels = [];
-    //   let start = 0.0;
-    //   let end = n;
-    //   while (end <= 1) {
-    //     const sentsPerBand = sentiments.reduce((a, s) => {
-    //       a += s >= start && s < end ? 1 : 0;
-    //       return a;
-    //     }, 0);
-    //     sentBandsTotals.push(sentsPerBand);
-    //     sentBandsLabels.push(`[${start.toFixed ? start.toFixed(1) : start}, ${end.toFixed(1)})`);
-    //     start += n;
-    //     end += n;
-    //   }
-    //   return {sentBandsTotals, sentBandsLabels};
-    // }
-
-    // console.log(getDivisions(.01, tweets.map(t => t.sentiment)));
-
-    // const sentBandLabels = getDivisions(.1, tweets.map(t => t.sentiment)).sentBandLabels;
-    // const sentBandTotals = getDivisions(.1, tweets.map(t => t.sentiment)).sentBandTotals;
-
     const sentBandsLabels = <%- JSON.stringify(sentBandsLabels) %>;
     const sentBandsTotals = <%- JSON.stringify(sentBandsTotals) %>;
     const sentimentGradient = <%- JSON.stringify(sentimentBarGradient) %>;
@@ -159,8 +137,11 @@
     options: {
       title: {
           display: true,
-          text: `Total Tweets per Subdivision (n=0.01)`,
+          text: `Total Tweets per Sentiment Subdivided in(n=0.01) Intervals`,
           fontSize: 16,
+        },
+        legend: {
+          display: false
         },
         scales: {
             yAxes: [{
@@ -171,6 +152,52 @@
         }
     }
 });
+
+
+    // Line Area Chart
+    const sentLineAreaLabels = <%- JSON.stringify(sentLineAreaLabels) %>;
+    const sentLineAreaTotals = <%- JSON.stringify(sentLineAreaTotals) %>;
+
+    var lineAreaCtx = document.getElementById("sentimentLineArea").getContext("2d");
+    var gradientStroke = lineAreaCtx.createLinearGradient(1000, 0, 100, 0);
+    gradientStroke.addColorStop(0, 'rgba(0,0,255,.5)');
+    gradientStroke.addColorStop(1, 'rgba(255,0,0,.5)');
+    var sentLineArea = new Chart(lineAreaCtx, {
+    type: 'line',
+    data: {
+        labels: sentLineAreaLabels,
+        datasets: [{
+            label: '# of Tweets',
+            data: sentLineAreaTotals,
+            borderColor:               gradientStroke,
+            pointBorderColor:          gradientStroke,
+            pointBackgroundColor:      gradientStroke,
+            pointHoverBackgroundColor: gradientStroke,
+            pointHoverBorderColor:     gradientStroke,
+            borderWidth: 1,
+            backgroundColor: gradientStroke,
+            borderColor: gradientStroke,
+            fill: true,
+        }]
+    },
+    options: {
+      title: {
+          display: true,
+          text: `Tweets per Sentiment Bounded at (n=0.05) Intervals`,
+          fontSize: 16,
+        },
+        legend: {
+          display: false
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+  });
 
 
     // Line Chart
@@ -191,13 +218,10 @@
       return {decimatedSentiments, decimatedDates};
     }
 
-    const decimateFactor = 100;
+    const decimateFactor = 50;
 
 
     var lineCtx = document.getElementById("sentimentLine").getContext("2d");
-    // var gradientStroke = lineCtx.createLinearGradient(0, 500, 0, 0);
-    // gradientStroke.addColorStop(0, "red");
-    // gradientStroke.addColorStop(1, "blue");
     var chart = new Chart(lineCtx, {
       // The type of chart we want to create
       type: 'line',
@@ -221,7 +245,7 @@
       // Configuration options go here
       options: {
         legend: {
-          display: true,
+          display: false,
           labels: {
             // boxWidth: 15
           }

@@ -255,6 +255,8 @@ function sentiment(req, res) {
         sentimentBarGradient: gradient('rgba(255,0,0,1)', 'rgba(0,0,255,1)', 100, 0.4),
         sentBandsTotals: getDivisions(0.01, tweets.map(t => t.sentiment)).sentBandsTotals,
         sentBandsLabels: getDivisions(0.01, tweets.map(t => t.sentiment)).sentBandsLabels,
+        sentLineAreaTotals: getDivisions(0.05, tweets.map(t => t.sentiment)).sentBandsTotals,
+        sentLineAreaLabels: getDivisions(0.05, tweets.map(t => t.sentiment)).sentBandsLabels,
       });
     })
     .catch(err => handleError(err));
@@ -345,26 +347,19 @@ function getDivisions(n, sentiments) {
   const sentBandsLabels = [];
   let start = 0;
   let end = n;
-  while (end <= 1) {
+  while (end <= 1.0001) {
     const sentsPerBand = sentiments.reduce((a, s) => {
       a += s >= start && s < end ? 1 : 0;
       return a;
     }, 0);
     sentBandsTotals.push(sentsPerBand);
-    sentBandsLabels.push(`< ${end.toFixed(2)})`);
+    sentBandsLabels.push(`[${start.toFixed(2)}, ${end.toFixed(2)})`);
     start += n;
     end += n;
   }
   return {sentBandsTotals, sentBandsLabels};
 }
 
-
-function initializeBandWidthBarChart(tweets, bandWidth) {
-  // const bandWidth = bandWidth;
-  const sentBandLabels = getDivisions(bandWidth, tweets.map(t => t.sentiment)).sentBandLabels;
-  const sentBandTotals = getDivisions(bandWidth, tweets.map(t => t.sentiment)).sentBandTotals;
-  return {sentBandTotals, sentBandLabels};
-}
 
 // ============================
 // Error handlers
