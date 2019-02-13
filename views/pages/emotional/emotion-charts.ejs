@@ -1,0 +1,145 @@
+<div class="emotionPieContainer">
+  <canvas id="emotionPolar"></canvas>
+</div>
+<div class="lineContainer">
+  <canvas id="emotionLine"></canvas>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+
+<script>
+  window.onload = function () {
+    // This creates normal js object to work wth
+    const tweets = <%- JSON.stringify(tweets) %>;
+    const averages = <%- JSON.stringify(averages) %>;
+    const colorMap = <%- JSON.stringify(emotionColorMap) %>;
+
+
+    var polarCtx = document.getElementById("emotionPolar");
+    var myChart = new Chart(polarCtx, {
+      type: 'polarArea',
+      data: {
+        labels: ["Anger", "Fear", "Joy", "Sadness", "Surprise"],
+        datasets: [{
+          label: 'Emotional Text Analysis',
+          data: [averages.anger, averages.fear, averages.joy, averages.sadness, averages.surprise],
+          backgroundColor: [
+            colorMap.anger[1],
+            colorMap.fear[1],
+            colorMap.joy[1],
+            colorMap.sadness[1],
+            colorMap.surprise[1]
+          ],
+          borderColor: [
+            colorMap.anger[0],
+            colorMap.fear[0],
+            colorMap.joy[0],
+            colorMap.sadness[0],
+            colorMap.surprise[0]
+
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+    // Line Chart
+    // decimate data
+    const decimateFactor = 50;
+
+    // function decimateData(n) {
+      // let sentiments = tweets.map(t => t.sentiment);
+      // let dates = tweets.map(t => t.created_at);
+      // const decimatedSentiments = [];
+      // const decimatedDates = [];
+      // while (sentiments.length) {
+      //   const deciSent = sentiments.slice(0, n).reduce((a, s) => a + s) / sentiments.slice(0, n).length;
+      //   decimatedSentiments.push(deciSent)
+      //   sentiments = sentiments.slice(n);
+
+      //   decimatedDates.push(dates[0]);
+      //   dates = dates.slice(n);
+      // }
+      // return { decimatedSentiments, decimatedDates };
+    // }
+
+
+
+    var lineCtx = document.getElementById("emotionLine").getContext("2d");
+    var chart = new Chart(lineCtx, {
+      // The type of chart we want to create
+      type: 'line',
+      // The data for our dataset
+      data: {
+        labels: journals.map(j => new Date(j.date)),
+        datasets: [{
+          label: "Sadness",
+          backgroundColor: colormap.sadness[1],
+          borderColor: colormap.sadness[0],
+          data: journals.map(j => j.sadness),
+          borderWidth: 2
+        }, {
+          label: "Sentiment",
+          backgroundColor: colormap.sentiment[1],
+          borderColor: colormap.sentiment[0],
+          data: journals.map(j => j.sentiment),
+          borderWidth: 2
+        }, {
+          label: "Surprise",
+          backgroundColor: colormap.surprise[1],
+          borderColor: colormap.surprise[0],
+          data: journals.map(j => j.surprise),
+          borderWidth: 2
+        }, {
+          label: "Anger",
+          backgroundColor: colormap.anger[1],
+          borderColor: colormap.anger[0],
+          data: journals.map(j => j.anger),
+          borderWidth: 2
+        }, {
+          label: "Fear",
+          backgroundColor: colormap.fear[1],
+          borderColor: colormap.fear[0],
+          data: journals.map(j => j.fear),
+          borderWidth: 2
+        }, {
+          label: "Joy",
+          backgroundColor: colormap.joy[1],
+          borderColor: colormap.joy[0],
+          data: journals.map(j => j.joy),
+          borderWidth: 2
+        }
+        ],
+      },
+      // },
+      // Configuration options go here
+      options: {
+        legend: {
+          display: false,
+          labels: {
+            // boxWidth: 15
+          }
+        },
+        title: {
+          display: true,
+          text: `Tweet Sentiment (Decimated n=${decimateFactor}) Over Time`,
+          fontSize: 16,
+        },
+        scales: {
+          xAxes: [{
+            type: 'time',
+          }]
+        }
+      }
+    });
+  }
+</script>
