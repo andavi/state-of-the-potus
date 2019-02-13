@@ -209,6 +209,7 @@ function emotional(req, res) {
     .then(result => {
       const emotions = result.rows.map(row => new Tweet(row).emotion);
       return res.render('pages/emotional/show', {
+        tweets: result.rows.map(row => new Tweet(row)),
         averages: getAverages(emotions),
         emotionColorMap
       });
@@ -359,6 +360,8 @@ function getDivisions(n, sentiments) {
   }
   return {sentBandsTotals, sentBandsLabels};
 }
+
+
 
 
 // ============================

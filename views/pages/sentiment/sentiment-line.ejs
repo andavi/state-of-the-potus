@@ -5,7 +5,7 @@
   <div class="pieContainer">
     <canvas id="sentimentMultiPie"></canvas>
   </div>
-  <div class="barChartContainer">
+  <div class="sentimentBarChartContainer">
     <canvas id="sentimentBar"></canvas>
   </div>
   <div class="lineAreaContainer">
@@ -137,7 +137,7 @@
     options: {
       title: {
           display: true,
-          text: `Total Tweets per Sentiment Subdivided in(n=0.01) Intervals`,
+          text: `Total Tweets per Sentiment Subdivided into (n=0.01) Intervals`,
           fontSize: 16,
         },
         legend: {
@@ -218,7 +218,7 @@
       return {decimatedSentiments, decimatedDates};
     }
 
-    const decimateFactor = 50;
+    const decimateFactor = 100;
 
 
     var lineCtx = document.getElementById("sentimentLine").getContext("2d");
