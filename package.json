@@ -19,7 +19,7 @@
   "homepage": "https://github.com/andavi/state-of-the-potus#readme",
   "dependencies": {
     "chart": "^0.1.2",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",

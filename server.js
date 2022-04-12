@@ -5,11 +5,11 @@ const express = require('express');
 const cors = require('cors');
 // const superagent = require('superagent');
 const pg = require('pg');
-const format = require('pg-format');
+// const format = require('pg-format');
 const methodOverride = require('method-override');
 const indico = require('indico.io');
 indico.apiKey = process.env.INDICO_API_KEY;
-var Twitter = require('twitter');
+// var Twitter = require('twitter');
 // var Chart = require('chart.js');
 
 const gradient = require('./dependencies/gradient');
@@ -23,12 +23,12 @@ require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 // Twitter Client set up
-var twitterClient = new Twitter({
-  consumer_key: process.env.TWITTER_API_KEY,
-  consumer_secret: process.env.TWITTER_API_SECRET_KEY,
-  access_token_key: process.env.TWITTER_ACCESS_TOKEN,
-  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
+// var twitterClient = new Twitter({
+//   consumer_key: process.env.TWITTER_API_KEY,
+//   consumer_secret: process.env.TWITTER_API_SECRET_KEY,
+//   access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+//   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+// });
 
 // PostgresQL setup
 const pgClient = new pg.Client(process.env.DATABASE_URL);
@@ -70,7 +70,7 @@ app.get('/:id', details);
 // Route handlers
 // ============================
 
-function homeNoAPIs(req, res) {
+function home(req, res) {
   let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
   pgClient.query(SQL)
     .then(result => {
@@ -82,110 +82,110 @@ function homeNoAPIs(req, res) {
     .catch(err => handleError(err));
 }
 
-function home(req, res) {
-  // check that we're  not adding repeats to the db
-  const SQL = 'SELECT id FROM tweets;';
-  pgClient.query(SQL)
-    .then(result => {
-      const repeatIds = result.rows.map(row => Number(row.id));
+// function home(req, res) {
+//   // check that we're  not adding repeats to the db
+//   const SQL = 'SELECT id FROM tweets;';
+//   pgClient.query(SQL)
+//     .then(result => {
+//       const repeatIds = result.rows.map(row => Number(row.id));
 
-      var params = {
-        screen_name: 'realDonaldTrump',
-        trim_user: true,
-        exclude_replies: false,
-        include_rts: false,
-        count: 5,
-        tweet_mode: 'extended',
-        // since_id: 1.09073103735588e+18
-      };
-      twitterClient.get('statuses/user_timeline', params)
-        .then(tweets => {
-          // console.log(tweets);
-          // not keeping tweets that have links or are repeats
-          const filteredTweets = tweets.filter(t => t.entities.urls.length === 0 && !repeatIds.includes(t.id));
+//       var params = {
+//         screen_name: 'realDonaldTrump',
+//         trim_user: true,
+//         exclude_replies: false,
+//         include_rts: false,
+//         count: 5,
+//         tweet_mode: 'extended',
+//         // since_id: 1.09073103735588e+18
+//       };
+//       twitterClient.get('statuses/user_timeline', params)
+//         .then(tweets => {
+//           // console.log(tweets);
+//           // not keeping tweets that have links or are repeats
+//           const filteredTweets = tweets.filter(t => t.entities.urls.length === 0 && !repeatIds.includes(t.id));
 
-          // if all tweets have been stored, retrieve them and render page
-          if (filteredTweets.length === 0) {
-            let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
-            pgClient.query(SQL)
-              .then(result => {
-                return res.render('pages/home/index', {
-                  tweets: result.rows.map(row => new Tweet(row)),
-                  barColorMap: emotionColorMap,
-                });
-              })
-              .catch(err => handleError(err));
+//           // if all tweets have been stored, retrieve them and render page
+//           if (filteredTweets.length === 0) {
+//             let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
+//             pgClient.query(SQL)
+//               .then(result => {
+//                 return res.render('pages/home/index', {
+//                   tweets: result.rows.map(row => new Tweet(row)),
+//                   barColorMap: emotionColorMap,
+//                 });
+//               })
+//               .catch(err => handleError(err));
 
-          // otherwise continue on to analyze and store the new ones
-          } else {
-            // replace the html ampersand code with an &
-            const fullTexts = filteredTweets.map(t => t.full_text.replace(/&amp;/g, '&'));
+//           // otherwise continue on to analyze and store the new ones
+//           } else {
+//             // replace the html ampersand code with an &
+//             const fullTexts = filteredTweets.map(t => t.full_text.replace(/&amp;/g, '&'));
 
-            // get sentiment_hq
-            indico.sentimentHQ(fullTexts)
-              .then(sentimentArr => {
+//             // get sentiment_hq
+//             indico.sentimentHQ(fullTexts)
+//               .then(sentimentArr => {
 
-                // get emotions in second batch request
-                indico.emotion(fullTexts)
-                  .then(emotionsArr => {
+//                 // get emotions in second batch request
+//                 indico.emotion(fullTexts)
+//                   .then(emotionsArr => {
 
-                    // get political analysis next
-                    indico.political(fullTexts)
-                      .then(politicalArr => {
+//                     // get political analysis next
+//                     indico.political(fullTexts)
+//                       .then(politicalArr => {
 
-                        // then personality
-                        indico.personality(fullTexts)
-                          .then(personalityArr => {
+//                         // then personality
+//                         indico.personality(fullTexts)
+//                           .then(personalityArr => {
 
-                            // normalize the tweets to the information we want
-                            const normalizedTweets = [];
-                            for (let i in filteredTweets) {
-                              const normTweet = new Row(
-                                filteredTweets[i],
-                                fullTexts[i],
-                                sentimentArr[i],
-                                emotionsArr[i],
-                                politicalArr[i],
-                                personalityArr[i]
-                              )
-                              normalizedTweets.push(normTweet);
-                            }
+//                             // normalize the tweets to the information we want
+//                             const normalizedTweets = [];
+//                             for (let i in filteredTweets) {
+//                               const normTweet = new Row(
+//                                 filteredTweets[i],
+//                                 fullTexts[i],
+//                                 sentimentArr[i],
+//                                 emotionsArr[i],
+//                                 politicalArr[i],
+//                                 personalityArr[i]
+//                               )
+//                               normalizedTweets.push(normTweet);
+//                             }
 
-                            // store in db
-                            const valuesArr = normalizedTweets.map(t => {
-                              return [t.id, t.created_at, t.full_text, t.sentiment, t.anger, t.fear, t.joy, t.sadness, t.surprise, t.libertarian, t.green, t.liberal, t.conservative, t.extraversion, t.openness, t.agreeableness, t.conscientiousness]
-                            })
-                            let SQL = format('INSERT INTO tweets (id, created_at, full_text, sentiment, anger, fear, joy, sadness, surprise, libertarian, green, liberal, conservative, extraversion, openness, agreeableness, conscientiousness) VALUES %L', valuesArr);
+//                             // store in db
+//                             const valuesArr = normalizedTweets.map(t => {
+//                               return [t.id, t.created_at, t.full_text, t.sentiment, t.anger, t.fear, t.joy, t.sadness, t.surprise, t.libertarian, t.green, t.liberal, t.conservative, t.extraversion, t.openness, t.agreeableness, t.conscientiousness]
+//                             })
+//                             let SQL = format('INSERT INTO tweets (id, created_at, full_text, sentiment, anger, fear, joy, sadness, surprise, libertarian, green, liberal, conservative, extraversion, openness, agreeableness, conscientiousness) VALUES %L', valuesArr);
 
-                            pgClient.query(SQL)
-                              .then(result => {
-                                console.log(result);
+//                             pgClient.query(SQL)
+//                               .then(result => {
+//                                 console.log(result);
 
-                                let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
-                                pgClient.query(SQL)
-                                  .then(result => {
-                                    return res.render('pages/home/index', {
-                                      tweets: result.rows.map(row => new Tweet(row)),
-                                      barColorMap: emotionColorMap,
-                                    });
-                                  })
-                                  .catch(err => handleError(err));
-                              })
-                              .catch(err => handleError(err));
-                          })
-                          .catch(err => handleError(err));
-                      })
-                      .catch(err => handleError(err));
-                  })
-                  .catch(err => handleError(err));
-              })
-              .catch(err => handleError(err));
-          }
-        })
-        .catch(err => handleError(err));
-    })
-    .catch(err => handleError(err));
-}
+//                                 let SQL = 'SELECT * FROM tweets ORDER BY id DESC';
+//                                 pgClient.query(SQL)
+//                                   .then(result => {
+//                                     return res.render('pages/home/index', {
+//                                       tweets: result.rows.map(row => new Tweet(row)),
+//                                       barColorMap: emotionColorMap,
+//                                     });
+//                                   })
+//                                   .catch(err => handleError(err));
+//                               })
+//                               .catch(err => handleError(err));
+//                           })
+//                           .catch(err => handleError(err));
+//                       })
+//                       .catch(err => handleError(err));
+//                   })
+//                   .catch(err => handleError(err));
+//               })
+//               .catch(err => handleError(err));
+//           }
+//         })
+//         .catch(err => handleError(err));
+//     })
+//     .catch(err => handleError(err));
+// }
 
 
 function details(req, res) {
